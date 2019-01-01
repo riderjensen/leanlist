@@ -39,9 +39,6 @@ class ListLists extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        SizedBox(
-          height: 100,
-        ),
         Text('No list currently created.'),
       ],
     );
