@@ -23,7 +23,9 @@ class _CompletedListTile extends State<CompletedListTile> {
             onDismissed: (DismissDirection direction) {
               if (direction == DismissDirection.startToEnd ||
                   direction == DismissDirection.endToStart) {
-                items.removeAt(int);
+                setState(() {
+                  items.removeAt(int);
+                });
                 // update db
               }
             },
