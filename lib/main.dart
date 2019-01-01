@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import './widgets/home_fab.dart';
 import './pages/list_lists.dart';
 import './pages/list_one_list.dart';
+import './pages/create_new_list.dart';
 
 void main() => runApp(MyApp());
 
@@ -16,6 +17,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       home: MyHomePage(),
+      routes: {'/create': (BuildContext context) => CreateNewList()},
       onGenerateRoute: (RouteSettings settings) {
         final List<String> pathElements = settings.name.split('/');
         if (pathElements[0] != '') {
