@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
+import '../form_elements/create_radio_buttons.dart';
+
 class CreateNewList extends StatelessWidget {
-  final Map<String, dynamic> _formData = {
+  final Map<String, dynamic> formData = {
     'id': null,
     'title': null,
     'creator': 'Rider',
@@ -9,7 +11,6 @@ class CreateNewList extends StatelessWidget {
     'items': {'incomplete': [], 'complete': []}
   };
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  String myVal = 'Null';
 
   @override
   Widget build(BuildContext context) {
@@ -18,6 +19,7 @@ class CreateNewList extends StatelessWidget {
         title: Text('Create new list'),
       ),
       body: Container(
+        padding: EdgeInsets.all(20.0),
         child: Column(
           children: <Widget>[
             Form(
@@ -27,7 +29,7 @@ class CreateNewList extends StatelessWidget {
                   Text('Enter a title'),
                   TextFormField(
                     onSaved: (String value) {
-                      _formData['title'] = value;
+                      formData['title'] = value;
                     },
                     validator: (String value) {
                       if (value.isEmpty) {
@@ -35,43 +37,25 @@ class CreateNewList extends StatelessWidget {
                       }
                     },
                   ),
+                  SizedBox(
+                    height: 20,
+                  ),
                   Text('Choose list permissions'),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Radio(
-                        onChanged: (value) {
-                          myVal = value;
-                        },
-                        groupValue: myVal,
-                        value: 'Full',
-                      ),
-                      Text('Full permissions')
-                    ],
+                  SizedBox(
+                    height: 10,
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Radio(
-                        onChanged: (value) {
-                          myVal = value;
-                        },
-                        groupValue: myVal,
-                        value: 'Partial',
-                      ),
-                      Text('Limited permissions')
-                    ],
-                  ),
+                  CreateRadioButtons(formData),
                   FlatButton(
+                    color: Colors.blue,
                     child: Text('Create'),
                     onPressed: () {
-                      print('create');
                       _formKey.currentState.save();
-                      if (!_formKey.currentState.validate() || myVal == null) {
+                      if (!_formKey.currentState.validate() ||
+                          formData['permissions'] == null) {
                         return;
                       }
-                      _formData['permissions'] = myVal;
                       // assign id?
+                      // add to local list now?
                       // await putting into db
                       // push new home page with updated lists
                     },

@@ -11,17 +11,6 @@ class HomeFab extends StatefulWidget {
 }
 
 class _HomeFab extends State<HomeFab> with TickerProviderStateMixin {
-  AnimationController _controller;
-
-  @override
-  void initState() {
-    _controller = AnimationController(
-      vsync: this,
-      duration: Duration(milliseconds: 100),
-    );
-    super.initState();
-  }
-
   Future _addNewListToAccount() async {
     return showDialog<void>(
       context: context,
