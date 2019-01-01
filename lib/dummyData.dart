@@ -1,6 +1,7 @@
 final List<Map> ourList = [
   {
-    'id': '0',
+    'id': 'c750f160-0b50-11e9-f50d-11e28813cc33',
+    'shareId': 'c750f160',
     'title': 'My first list',
     'creator': 'Rider',
     'permissions': 'full',
@@ -30,7 +31,8 @@ final List<Map> ourList = [
     }
   },
   {
-    'id': '4',
+    'id': 'cba0c380-0b50-11e9-9048-3fc21acebc18',
+    'shareId': 'cba0c380',
     'title': 'My second list',
     'creator': 'Rider',
     'permissions': 'full',
@@ -60,7 +62,8 @@ final List<Map> ourList = [
     }
   },
   {
-    'id': '5',
+    'id': 'c11777b0-0b50-11e9-fa15-4781cd3d8c2f',
+    'shareId': 'c11777b0',
     'title': 'My second list',
     'creator': 'Rider',
     'permissions': 'full',
