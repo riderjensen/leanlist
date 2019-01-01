@@ -19,23 +19,13 @@ class _MainListCard extends State<MainListCard> {
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             ListTile(
-              leading: Icon(Icons.album),
-              title: Text(widget.ourList[int]['title']),
-              subtitle: Text('Creator: ${widget.ourList[int]['creator']}'),
-            ),
-            ButtonTheme.bar(
-              child: ButtonBar(
-                children: <Widget>[
-                  FlatButton(
-                    child: const Text('View'),
-                    onPressed: () {
-                      Navigator.pushNamed<dynamic>(
-                          context, '/list/' + int.toString());
-                    },
-                  ),
-                ],
-              ),
-            ),
+                leading: Icon(Icons.album),
+                title: Text(widget.ourList[int]['title']),
+                subtitle: Text('Creator: ${widget.ourList[int]['creator']}'),
+                onTap: () {
+                  Navigator.pushNamed<dynamic>(
+                      context, '/list/' + int.toString());
+                }),
           ],
         ),
       ),
