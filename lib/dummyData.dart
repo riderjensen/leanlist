@@ -1,4 +1,4 @@
-final List ourList = [
+final List<Map> ourList = [
   {
     'id': '0',
     'title': 'My first list',
