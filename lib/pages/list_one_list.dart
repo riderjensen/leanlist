@@ -8,15 +8,16 @@ class ListOneList extends StatelessWidget {
 
   Widget completedItems(Map<String, String> completeMaps) {
     return ListTile(
-        leading: const Icon(Icons.flight_land),
+        leading: const Icon(Icons.check_box),
         title: Text(completeMaps['item']),
-        subtitle: Text(completeMaps['date']),
+        subtitle: Text(
+            'Completed by: ${completeMaps['userCom']} - ${completeMaps['date']}'),
         onTap: () {/* react to the tile being tapped */});
   }
 
   Widget incompleteItems(String incompleteItems) {
     return ListTile(
-        leading: const Icon(Icons.flight_land),
+        leading: const Icon(Icons.check_box_outline_blank),
         title: Text(incompleteItems),
         onTap: () {/* react to the tile being tapped */});
   }
