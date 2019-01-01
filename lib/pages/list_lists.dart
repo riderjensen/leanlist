@@ -5,6 +5,7 @@ import '../ui_elements/main_list_card.dart';
 class ListLists extends StatelessWidget {
   final List ourList = [
     {
+      'id': '1',
       'title': 'My first list',
       'creator': 'Rider',
       'permissions': 'full',
