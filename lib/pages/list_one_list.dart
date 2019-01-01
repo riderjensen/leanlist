@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../dummyData.dart';
 
 class ListOneList extends StatelessWidget {
   final String listId;
@@ -7,13 +8,17 @@ class ListOneList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // get the list from the DB
+    Map<String, dynamic> ourItem = ourList[int.parse(listId)];
     return Scaffold(
-        appBar: AppBar(
-          title: Text('List Name'),
+      appBar: AppBar(
+        title: Text(ourItem['title']),
+      ),
+      body: Container(
+        child: ListView.builder(
+          itemCount: ourItem['incomplete'].length,
+          itemBuilder: (context, int) {},
         ),
-        body: Container(
-          child: Text('Hello this is a new page'),
-        ));
+      ),
+    );
   }
 }
