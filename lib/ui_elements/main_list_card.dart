@@ -29,8 +29,8 @@ class _MainListCard extends State<MainListCard> {
                   FlatButton(
                     child: const Text('View'),
                     onPressed: () {
-                      // send them to list view page
-                      print('You clicked the button');
+                      Navigator.pushNamed<dynamic>(
+                          context, '/list/' + widget.ourList[int]['id']);
                     },
                   ),
                 ],
