@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import './widgets/home_fab.dart';
 import './pages/list_lists.dart';
+import './pages/list_one_list.dart';
 
 void main() => runApp(MyApp());
 
@@ -14,28 +15,36 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(title: 'Lists'),
+      home: MyHomePage(),
+      onGenerateRoute: (RouteSettings settings) {
+        final List<String> pathElements = settings.name.split('/');
+        if (pathElements[0] != '') {
+          return null;
+        }
+        if (pathElements[1] == 'list') {
+          final String listId = pathElements[2];
+          return MaterialPageRoute<bool>(
+            builder: (BuildContext context) => ListOneList(listId),
+          );
+        }
+        return null;
+      },
+      onUnknownRoute: (RouteSettings settings) {
+        return MaterialPageRoute(
+            builder: (BuildContext context) => MyHomePage());
+      },
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
-
-  final String title;
-
-  @override
-  _MyHomePageState createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-
+class MyHomePage extends StatelessWidget {
+  final String title = 'Lists';
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        title: Text(title),
       ),
       body: ListLists(),
       floatingActionButton: HomeFab(),
