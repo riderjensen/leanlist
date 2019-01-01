@@ -22,7 +22,8 @@ class _IncompleteListTile extends State<IncompleteListTile> {
           return Dismissible(
             key: Key(items[int]),
             onDismissed: (DismissDirection direction) {
-              if (direction == DismissDirection.startToEnd) {
+              if (direction == DismissDirection.startToEnd ||
+                  direction == DismissDirection.endToStart) {
                 items.removeAt(int);
                 // update db
               }

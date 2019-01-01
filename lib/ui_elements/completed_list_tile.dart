@@ -21,7 +21,8 @@ class _CompletedListTile extends State<CompletedListTile> {
           return Dismissible(
             key: Key(items[int]['title']),
             onDismissed: (DismissDirection direction) {
-              if (direction == DismissDirection.startToEnd) {
+              if (direction == DismissDirection.startToEnd ||
+                  direction == DismissDirection.endToStart) {
                 items.removeAt(int);
                 // update db
               }
