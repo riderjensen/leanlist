@@ -1,47 +1,13 @@
 import 'package:flutter/material.dart';
 import '../dummyData.dart';
 
+import '../ui_elements/completed_list_tile.dart';
+import '../ui_elements/incomplete_list_tile.dart';
+
 class ListOneList extends StatelessWidget {
   final String listId;
 
   ListOneList(this.listId);
-
-  Widget completedItems(Map<String, String> completeMaps) {
-    return ListTile(
-        leading: const Icon(Icons.flight_land),
-        title: Text(completeMaps['item']),
-        subtitle: Text(completeMaps['date']),
-        onTap: () {/* react to the tile being tapped */});
-  }
-
-  Widget incompleteItems(String incompleteItems) {
-    return ListTile(
-        leading: const Icon(Icons.flight_land),
-        title: Text(incompleteItems),
-        onTap: () {/* react to the tile being tapped */});
-  }
-
-  Widget buildProgressItems(item) {
-    return Container(
-      child: ListView.builder(
-        itemCount: item.length,
-        itemBuilder: (context, int) {
-          return incompleteItems(item[int]);
-        },
-      ),
-    );
-  }
-
-  Widget buildFinishedItems(item) {
-    return Container(
-      child: ListView.builder(
-        itemCount: item.length,
-        itemBuilder: (context, int) {
-          return completedItems(item[int]);
-        },
-      ),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -66,8 +32,8 @@ class ListOneList extends StatelessWidget {
         ),
         body: TabBarView(
           children: <Widget>[
-            buildProgressItems(ourItem['items']['incomplete']),
-            buildFinishedItems(ourItem['items']['complete'])
+            IncompleteListTile(ourItem['items']),
+            CompletedListTile(ourItem['items']),
           ],
         ),
       ),
