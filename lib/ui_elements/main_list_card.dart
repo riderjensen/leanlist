@@ -30,7 +30,7 @@ class _MainListCard extends State<MainListCard> {
                     child: const Text('View'),
                     onPressed: () {
                       Navigator.pushNamed<dynamic>(
-                          context, '/list/' + widget.ourList[int]['id']);
+                          context, '/list/' + int.toString());
                     },
                   ),
                 ],
