@@ -34,7 +34,9 @@ class _CompletedListTile extends State<CompletedListTile> {
               children: <Widget>[
                 ListTile(
                     leading: const Icon(Icons.check_box),
-                    title: Text(items[int]['item']),
+                    title: Text(
+                      items[int]['item'],
+                    ),
                     subtitle: Text(
                         'Completed by: ${items[int]['userCom']} - ${items[int]['date']}'),
                     onTap: () {
