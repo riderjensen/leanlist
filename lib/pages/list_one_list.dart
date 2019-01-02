@@ -71,6 +71,15 @@ class ListOneList extends StatelessWidget {
             CompletedListTile(ourItem['items']),
           ],
         ),
+        floatingActionButton: FloatingActionButton(
+          backgroundColor: Theme.of(context).primaryColor,
+          heroTag: 'contact',
+          onPressed: () {},
+          child: Icon(
+            Icons.add,
+            color: Theme.of(context).cardColor,
+          ),
+        ),
       ),
     );
   }
