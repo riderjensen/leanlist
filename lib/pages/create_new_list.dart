@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:uuid/uuid.dart';
 
 import '../form_elements/create_radio_buttons.dart';
 
 class CreateNewList extends StatelessWidget {
   final Map<String, dynamic> formData = {
     'id': null,
+    'shareId': null,
     'title': null,
     'creator': 'Rider',
     'permissions': null,
@@ -54,6 +56,12 @@ class CreateNewList extends StatelessWidget {
                           formData['permissions'] == null) {
                         return;
                       }
+                      final Uuid uuid = new Uuid();
+                      final String newID = uuid.v1();
+                      formData['id'] = newID;
+                      formData['shareId'] = newID.split('-')[0];
+
+                      print(formData);
                       // assign id?
                       // add to local list now?
                       // await putting into db
