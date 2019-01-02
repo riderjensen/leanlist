@@ -6,6 +6,8 @@ import '../ui_elements/incomplete_list_tile.dart';
 
 class ListOneList extends StatelessWidget {
   final String listId;
+  final Map<String, String> _formData = {'item': null};
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   ListOneList(this.listId);
 
@@ -28,6 +30,62 @@ class ListOneList extends StatelessWidget {
               child: Text('Okay'),
               onPressed: () {
                 Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future _addItemDialog(BuildContext context) {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Enter a task'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Form(
+                  key: _formKey,
+                  child: Column(
+                    children: <Widget>[
+                      TextFormField(
+                        onSaved: (String value) {
+                          _formData['item'] = value;
+                        },
+                        validator: (String value) {
+                          if (value.isEmpty) {
+                            return 'Please enter a task for your list ';
+                          }
+                        },
+                      )
+                    ],
+                  ),
+                )
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            FlatButton(
+              child: Text('Add'),
+              onPressed: () {
+                // _formData['item'] add to the uncompleted list on the specific item
+                _formKey.currentState.save();
+                if (!_formKey.currentState.validate()) {
+                  return;
+                }
+
+                // this push isnt working, need to basically refresh the home page
+                Navigator.pushReplacementNamed(context, '/');
               },
             ),
           ],
@@ -74,7 +132,9 @@ class ListOneList extends StatelessWidget {
         floatingActionButton: FloatingActionButton(
           backgroundColor: Theme.of(context).primaryColor,
           heroTag: 'addItem',
-          onPressed: () {},
+          onPressed: () {
+            _addItemDialog(context);
+          },
           child: Icon(
             Icons.add,
             color: Theme.of(context).cardColor,
