@@ -13,47 +13,59 @@ class CompletedListTile extends StatefulWidget {
 class _CompletedListTile extends State<CompletedListTile> {
   @override
   Widget build(BuildContext context) {
-    final List<Map<String, String>> items = widget.ourList['complete'];
-    return Container(
-      child: ListView.builder(
-        itemCount: items.length,
-        itemBuilder: (context, int) {
-          return Dismissible(
-            key: Key(items[int]['title']),
-            onDismissed: (DismissDirection direction) {
-              if (direction == DismissDirection.startToEnd ||
-                  direction == DismissDirection.endToStart) {
-                setState(() {
-                  items.removeAt(int);
-                });
-                // update db
-              }
-            },
-            background: Container(
-              color: Colors.red,
-            ),
-            child: Column(
-              children: <Widget>[
-                ListTile(
-                    leading: const Icon(Icons.check_box),
-                    title: Text(
-                      items[int]['item'],
-                    ),
-                    subtitle: Text(
-                        'Completed by: ${items[int]['userCom']} - ${items[int]['date']}'),
-                    onTap: () {
-                      widget.ourList['incomplete'].add(items[int]['item']);
+    final List<Map> items = widget.ourList['complete'];
+    return items[0].isEmpty
+        ? Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Container(
+                padding: EdgeInsets.all(20.0),
+                child: Text('You have no completed items'),
+              )
+            ],
+          )
+        : Container(
+            child: ListView.builder(
+              itemCount: items.length,
+              itemBuilder: (context, int) {
+                return Dismissible(
+                  key: Key(items[int]['title']),
+                  onDismissed: (DismissDirection direction) {
+                    if (direction == DismissDirection.startToEnd ||
+                        direction == DismissDirection.endToStart) {
                       setState(() {
                         items.removeAt(int);
                       });
-                      // update the DB with the corrected information
-                    }),
-                Divider(),
-              ],
+                      // update db
+                    }
+                  },
+                  background: Container(
+                    color: Colors.red,
+                  ),
+                  child: Column(
+                    children: <Widget>[
+                      ListTile(
+                          leading: const Icon(Icons.check_box),
+                          title: Text(
+                            items[int]['item'],
+                          ),
+                          subtitle: Text(
+                              'Completed by: ${items[int]['userCom']} - ${items[int]['date']}'),
+                          onTap: () {
+                            widget.ourList['incomplete']
+                                .add(items[int]['item']);
+                            setState(() {
+                              items.removeAt(int);
+                            });
+                            // update the DB with the corrected information
+                          }),
+                      Divider(),
+                    ],
+                  ),
+                );
+              },
             ),
           );
-        },
-      ),
-    );
   }
 }
