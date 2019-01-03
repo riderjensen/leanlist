@@ -17,7 +17,7 @@ class CreateNewList extends StatelessWidget {
       'complete': [{}]
     }
   };
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  static GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final List ourList;
   CreateNewList(this.ourList);
 
@@ -63,7 +63,8 @@ class CreateNewList extends StatelessWidget {
               SizedBox(
                 height: 10,
               ),
-              FlatButton(
+              RaisedButton(
+                textColor: Colors.white,
                 color: Colors.blue,
                 child: Text('Create'),
                 onPressed: () {
