@@ -4,13 +4,19 @@ import '../dummyData.dart';
 import '../ui_elements/completed_list_tile.dart';
 import '../ui_elements/incomplete_list_tile.dart';
 
-class ListOneList extends StatelessWidget {
+class ListOneList extends StatefulWidget {
   final String listId;
   final Map<String, String> _formData = {'item': null};
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   ListOneList(this.listId);
+  @override
+  State<StatefulWidget> createState() {
+    return _ListOneList();
+  }
+}
 
+class _ListOneList extends State<ListOneList> {
   Future<void> _createShareAlert(BuildContext context, String shareId) async {
     return showDialog<void>(
       context: context,
@@ -38,7 +44,7 @@ class ListOneList extends StatelessWidget {
     );
   }
 
-  Future _addItemDialog(BuildContext context) {
+  Future<void> _createAddItemDialog(BuildContext context, List incompleteList) {
     return showDialog<void>(
       context: context,
       barrierDismissible: false,
@@ -49,12 +55,12 @@ class ListOneList extends StatelessWidget {
             child: ListBody(
               children: <Widget>[
                 Form(
-                  key: _formKey,
+                  key: widget._formKey,
                   child: Column(
                     children: <Widget>[
                       TextFormField(
                         onSaved: (String value) {
-                          _formData['item'] = value;
+                          widget._formData['item'] = value;
                         },
                         validator: (String value) {
                           if (value.isEmpty) {
@@ -78,14 +84,14 @@ class ListOneList extends StatelessWidget {
             FlatButton(
               child: Text('Add'),
               onPressed: () {
-                // _formData['item'] add to the uncompleted list on the specific item
-                _formKey.currentState.save();
-                if (!_formKey.currentState.validate()) {
+                widget._formKey.currentState.save();
+                if (!widget._formKey.currentState.validate()) {
                   return;
                 }
-
-                // this push isnt working, need to basically refresh the home page
-                Navigator.pushReplacementNamed(context, '/');
+                setState(() {
+                  incompleteList.add(widget._formData['item']);
+                });
+                Navigator.of(context).pop();
               },
             ),
           ],
@@ -96,7 +102,7 @@ class ListOneList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Map<dynamic, dynamic> ourItem = ourList[int.parse(listId)];
+    Map<dynamic, dynamic> ourItem = ourList[int.parse(widget.listId)];
     return DefaultTabController(
       length: 2,
       child: Scaffold(
@@ -133,7 +139,7 @@ class ListOneList extends StatelessWidget {
           backgroundColor: Theme.of(context).primaryColor,
           heroTag: 'addItem',
           onPressed: () {
-            _addItemDialog(context);
+            _createAddItemDialog(context, ourItem['items']['incomplete']);
           },
           child: Icon(
             Icons.add,
