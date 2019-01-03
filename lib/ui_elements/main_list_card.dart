@@ -19,7 +19,8 @@ class _MainListCard extends State<MainListCard> {
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             ListTile(
-                leading: Icon(Icons.album),
+                leading: Icon(IconData(widget.ourList[int]['icon'],
+                    fontFamily: 'MaterialIcons')),
                 title: Text(widget.ourList[int]['title']),
                 subtitle: Text('Creator: ${widget.ourList[int]['creator']}'),
                 onTap: () {
