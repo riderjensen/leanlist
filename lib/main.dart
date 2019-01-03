@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import './dummyData.dart';
+
 import './widgets/home_fab.dart';
 import './pages/list_lists.dart';
 import './pages/list_one_list.dart';
@@ -17,7 +19,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       home: MyHomePage(),
-      routes: {'/create': (BuildContext context) => CreateNewList()},
+      routes: {'/create': (BuildContext context) => CreateNewList(ourList)},
       onGenerateRoute: (RouteSettings settings) {
         final List<String> pathElements = settings.name.split('/');
         if (pathElements[0] != '') {
@@ -48,7 +50,7 @@ class MyHomePage extends StatelessWidget {
       appBar: AppBar(
         title: Text(title),
       ),
-      body: ListLists(),
+      body: ListLists(ourList),
       floatingActionButton: HomeFab(),
     );
   }
