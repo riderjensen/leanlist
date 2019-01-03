@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import './dummyData.dart';
+import './resources/dummyData.dart';
 
 import './widgets/home_fab.dart';
 import './pages/list_lists.dart';

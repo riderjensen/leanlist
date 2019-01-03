@@ -3,6 +3,7 @@ final List<Map> ourList = [
     'id': 'c750f160-0b50-11e9-f50d-11e28813cc33',
     'shareId': 'c750f160',
     'title': 'My first list',
+    'icon': 0xe192,
     'creator': 'Rider',
     'permissions': 'full',
     'items': {
@@ -34,6 +35,7 @@ final List<Map> ourList = [
     'id': 'cba0c380-0b50-11e9-9048-3fc21acebc18',
     'shareId': 'cba0c380',
     'title': 'My second list',
+    'icon': 0xe191,
     'creator': 'Rider',
     'permissions': 'full',
     'items': {
@@ -49,6 +51,7 @@ final List<Map> ourList = [
     'id': 'c11777b0-0b50-11e9-fa15-4781cd3d8c2f',
     'shareId': 'c11777b0',
     'title': 'My second list',
+    'icon': 0xe193,
     'creator': 'Rider',
     'permissions': 'full',
     'items': {
