@@ -42,23 +42,7 @@ final List<Map> ourList = [
         'here is the second undone item on list two',
         'here is the thrid undone item on list two'
       ],
-      'complete': [
-        {
-          'item': 'here is the first item on list two',
-          'date': 'date here',
-          'userCom': 'Rider'
-        },
-        {
-          'item': 'here is the second item on list two',
-          'date': 'date here',
-          'userCom': 'Rider'
-        },
-        {
-          'item': 'here is the third item on list two',
-          'date': 'date here',
-          'userCom': 'Rider'
-        }
-      ]
+      'complete': [{}]
     }
   },
   {
