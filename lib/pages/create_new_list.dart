@@ -65,8 +65,6 @@ class CreateNewList extends StatelessWidget {
                       final String newID = uuid.v1();
                       formData['id'] = newID;
                       formData['shareId'] = newID.split('-')[0];
-
-                      print(formData);
                       ourList.add(formData);
                       // add to local list now?
                       // await putting into db
