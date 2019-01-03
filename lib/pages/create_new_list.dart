@@ -10,9 +10,14 @@ class CreateNewList extends StatelessWidget {
     'title': null,
     'creator': 'Rider',
     'permissions': null,
-    'items': {'incomplete': [], 'complete': []}
+    'items': {
+      'incomplete': [],
+      'complete': [{}]
+    }
   };
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final List ourList;
+  CreateNewList(this.ourList);
 
   @override
   Widget build(BuildContext context) {
@@ -62,10 +67,10 @@ class CreateNewList extends StatelessWidget {
                       formData['shareId'] = newID.split('-')[0];
 
                       print(formData);
-                      // assign id?
+                      ourList.add(formData);
                       // add to local list now?
                       // await putting into db
-                      // push new home page with updated lists
+                      Navigator.of(context).pop();
                     },
                   )
                 ],
