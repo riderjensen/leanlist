@@ -47,7 +47,6 @@ class AddListDialog extends StatelessWidget {
             if (!_formKey.currentState.validate()) {
               return;
             }
-            print(_formData['code']);
             // this push isnt working, need to basically refresh the home page
             Navigator.pushReplacementNamed(context, '/');
           },
