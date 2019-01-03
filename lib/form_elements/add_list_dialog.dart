@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class AddListDialog extends StatelessWidget {
   final Map<String, String> _formData = {'code': null};
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  static GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
