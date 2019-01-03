@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 
 import '../ui_elements/main_list_card.dart';
-import '../dummyData.dart';
 
 class ListLists extends StatelessWidget {
+  final List ourList;
+
+  ListLists(this.ourList);
+
   Widget returnEmpty() {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
