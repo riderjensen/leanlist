@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../dummyData.dart';
+import '../resources/dummyData.dart';
 
 import '../ui_elements/completed_list_tile.dart';
 import '../ui_elements/incomplete_list_tile.dart';
