@@ -24,7 +24,6 @@ void _resetColor() {
 class _IconChooser extends State<IconChooser> {
   @override
   Widget build(BuildContext context) {
-    _resetColor();
     return ListView.builder(
       itemCount: icons.length,
       itemBuilder: (context, int) {
