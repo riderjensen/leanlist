@@ -83,7 +83,7 @@ class _CreateNewList extends State<CreateNewList> {
           onPressed: () {
             _formKey.currentState.save();
             if (!_formKey.currentState.validate() ||
-                widget.formData['permissions'] == null) {
+                widget.formData['fullPermissions'] == null) {
               return;
             }
             setState(() {
@@ -114,10 +114,6 @@ class _CreateNewList extends State<CreateNewList> {
           child: Text('Create'),
           onPressed: () {
             _formKey.currentState.save();
-            if (!_formKey.currentState.validate() ||
-                widget.formData['permissions'] == null) {
-              return;
-            }
             final Uuid uuid = new Uuid();
             final String newID = uuid.v1();
             widget.formData['id'] = newID;
