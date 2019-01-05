@@ -5,7 +5,6 @@ import '../form_elements/icon_chooser.dart';
 
 class CreateNewList extends StatefulWidget {
   final List ourList;
-  bool firstPart = false;
 
   final Map<String, dynamic> formData = {
     'id': null,
@@ -29,7 +28,8 @@ class CreateNewList extends StatefulWidget {
 }
 
 class _CreateNewList extends State<CreateNewList> {
-  static GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  static GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
+  bool firstPart = false;
 
   Widget _returnText(wording) {
     return Text(wording);
@@ -87,7 +87,7 @@ class _CreateNewList extends State<CreateNewList> {
               return;
             }
             setState(() {
-              widget.firstPart = true;
+              firstPart = true;
             });
             // await putting into db
           },
@@ -137,12 +137,12 @@ class _CreateNewList extends State<CreateNewList> {
         padding: EdgeInsets.all(20.0),
         child: Form(
             key: _formKey,
-            child: !widget.firstPart
+            child: !firstPart
                 ? _returnTitleAndPermissions(context)
                 : _returnIconChooseArea(context)),
       ),
       bottomSheet: LinearProgressIndicator(
-        value: !widget.firstPart ? 0.5 : 1.0,
+        value: !firstPart ? 0.5 : 1.0,
       ),
     );
   }
