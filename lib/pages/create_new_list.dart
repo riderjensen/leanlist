@@ -2,21 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 
 import '../resources/icon_list.dart';
+import '../models/list_model.dart';
 
 class CreateNewList extends StatefulWidget {
   final List ourList;
 
   final Map<String, dynamic> formData = {
-    'id': null,
-    'shareId': null,
-    'title': null,
-    'icon': 57744,
-    'creator': 'Rider',
-    'fullPermissions': false,
-    'items': {
-      'incomplete': [],
-      'complete': [{}]
-    }
+    'fullPermissions': true,
+    'icon': 0xe192,
   };
 
   CreateNewList(this.ourList);
@@ -224,9 +217,16 @@ class _CreateNewList extends State<CreateNewList> {
             }
             final Uuid uuid = new Uuid();
             final String newID = uuid.v1();
-            widget.formData['id'] = newID;
-            widget.formData['shareId'] = newID.split('-')[0];
-            widget.ourList.add(widget.formData);
+            final ListModel newestAddition = new ListModel(
+              id: newID,
+              shareId: newID.split('-')[0],
+              creator: 'Default Creator',
+              icon: widget.formData['icon'],
+              title: widget.formData['title'],
+              fullPermissions: widget.formData['fullPermissions'],
+              items: {'incomplete': [], 'complete': []},
+            );
+            widget.ourList.add(newestAddition);
             // await putting into db
             Navigator.of(context).pop();
           },
