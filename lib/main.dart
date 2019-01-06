@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 import './resources/dummyData.dart';
-
+import './resources/dummyUser.dart';
+import './models/list_model.dart';
 import './widgets/home_fab.dart';
 import './pages/list_lists.dart';
 import './pages/list_one_list.dart';
@@ -43,14 +44,20 @@ class MyApp extends StatelessWidget {
 
 class MyHomePage extends StatelessWidget {
   final String title = 'Lists';
+  List<ListModel> myNewestList = [];
 
   @override
   Widget build(BuildContext context) {
+    firstUser.lists.forEach((listId) {
+      myNewestList
+          .add(ourList[ourList.indexWhere((item) => item.shareId == listId)]);
+    });
+
     return Scaffold(
       appBar: AppBar(
         title: Text(title),
       ),
-      body: ListLists(ourList),
+      body: ListLists(myNewestList),
       floatingActionButton: HomeFab(),
     );
   }
