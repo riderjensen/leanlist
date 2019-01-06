@@ -20,7 +20,9 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       home: MyHomePage(),
-      routes: {'/create': (BuildContext context) => CreateNewList(ourList)},
+      routes: {
+        '/create': (BuildContext context) => CreateNewList(ourList, firstUser)
+      },
       onGenerateRoute: (RouteSettings settings) {
         final List<String> pathElements = settings.name.split('/');
         if (pathElements[0] != '') {
@@ -44,10 +46,10 @@ class MyApp extends StatelessWidget {
 
 class MyHomePage extends StatelessWidget {
   final String title = 'Lists';
-  List<ListModel> myNewestList = [];
 
   @override
   Widget build(BuildContext context) {
+    List<ListModel> myNewestList = [];
     firstUser.lists.forEach((listId) {
       myNewestList
           .add(ourList[ourList.indexWhere((item) => item.shareId == listId)]);
@@ -57,7 +59,7 @@ class MyHomePage extends StatelessWidget {
       appBar: AppBar(
         title: Text(title),
       ),
-      body: ListLists(myNewestList),
+      body: ListLists(myNewestList, firstUser),
       floatingActionButton: HomeFab(),
     );
   }
