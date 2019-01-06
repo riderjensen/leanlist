@@ -59,6 +59,7 @@ mixin GetListInformation on ConnectedLists {
       email: 'riderjensen@gmail.com',
       lists: ['c750f160', 'cba0c380'],
     );
+    setUserLists();
   }
 
   void signUp(String username, String email, String password) {
@@ -68,5 +69,6 @@ mixin GetListInformation on ConnectedLists {
       email: email,
       lists: ['c750f160', 'cba0c380'],
     );
+    setUserLists();
   }
 }
