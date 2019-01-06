@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 
-import '../form_elements/icon_chooser.dart';
+import '../resources/icon_list.dart';
 
 class CreateNewList extends StatefulWidget {
   final List ourList;
@@ -27,15 +27,26 @@ class CreateNewList extends StatefulWidget {
   }
 }
 
+void _resetColor() {
+  for (List i in icons) {
+    i.forEach((f) => f['color'] = [158, 158, 158]);
+  }
+}
+
 class _CreateNewList extends State<CreateNewList> {
   static GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
-  bool firstPart = false;
+
+  @override
+  void initState() {
+    _resetColor();
+    super.initState();
+  }
 
   Widget _returnText(wording) {
     return Text(wording);
   }
 
-  Widget _returnTitleAndPermissions(BuildContext context) {
+  Widget _returnIconChooseArea(BuildContext context) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
@@ -76,34 +87,127 @@ class _CreateNewList extends State<CreateNewList> {
         SizedBox(
           height: 10,
         ),
-        RaisedButton(
-          textColor: Colors.white,
-          color: Colors.blue,
-          child: Text('Next'),
-          onPressed: () {
-            _formKey.currentState.save();
-            if (!_formKey.currentState.validate() ||
-                widget.formData['fullPermissions'] == null) {
-              return;
-            }
-            setState(() {
-              firstPart = true;
-            });
-            // await putting into db
-          },
-        )
-      ],
-    );
-  }
-
-  Widget _returnIconChooseArea(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
         _returnText('Choose an icon'),
         Flexible(
           fit: FlexFit.loose,
-          child: IconChooser(widget.formData),
+          child: ListView.builder(
+            itemCount: icons.length,
+            itemBuilder: (context, int) {
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  IconButton(
+                    onPressed: () {
+                      setState(() {
+                        widget.formData['icon'] = icons[int][0]['icon'];
+                        _resetColor();
+                        icons[int][0]['color'] = [100, 181, 246];
+                      });
+                    },
+                    icon: Icon(
+                      IconData(icons[int][0]['icon'],
+                          fontFamily: 'MaterialIcons'),
+                      color: Color.fromRGBO(
+                          icons[int][0]['color'][0],
+                          icons[int][0]['color'][1],
+                          icons[int][0]['color'][2],
+                          1),
+                    ),
+                  ),
+                  IconButton(
+                    onPressed: () {
+                      setState(() {
+                        widget.formData['icon'] = icons[int][1]['icon'];
+                        _resetColor();
+                        icons[int][1]['color'] = [100, 181, 246];
+                      });
+                    },
+                    icon: Icon(
+                      IconData(icons[int][1]['icon'],
+                          fontFamily: 'MaterialIcons'),
+                      color: Color.fromRGBO(
+                          icons[int][1]['color'][0],
+                          icons[int][1]['color'][1],
+                          icons[int][1]['color'][2],
+                          1),
+                    ),
+                  ),
+                  IconButton(
+                    onPressed: () {
+                      setState(() {
+                        widget.formData['icon'] = icons[int][2]['icon'];
+                        _resetColor();
+                        icons[int][2]['color'] = [100, 181, 246];
+                      });
+                    },
+                    icon: Icon(
+                      IconData(icons[int][2]['icon'],
+                          fontFamily: 'MaterialIcons'),
+                      color: Color.fromRGBO(
+                          icons[int][2]['color'][0],
+                          icons[int][2]['color'][1],
+                          icons[int][2]['color'][2],
+                          1),
+                    ),
+                  ),
+                  IconButton(
+                    onPressed: () {
+                      setState(() {
+                        widget.formData['icon'] = icons[int][3]['icon'];
+                        _resetColor();
+                        icons[int][3]['color'] = [100, 181, 246];
+                      });
+                    },
+                    icon: Icon(
+                      IconData(icons[int][3]['icon'],
+                          fontFamily: 'MaterialIcons'),
+                      color: Color.fromRGBO(
+                          icons[int][3]['color'][0],
+                          icons[int][3]['color'][1],
+                          icons[int][3]['color'][2],
+                          1),
+                    ),
+                  ),
+                  IconButton(
+                    onPressed: () {
+                      setState(() {
+                        widget.formData['icon'] = icons[int][4]['icon'];
+                        _resetColor();
+                        icons[int][4]['color'] = [100, 181, 246];
+                      });
+                    },
+                    icon: Icon(
+                      IconData(icons[int][4]['icon'],
+                          fontFamily: 'MaterialIcons'),
+                      color: Color.fromRGBO(
+                          icons[int][4]['color'][0],
+                          icons[int][4]['color'][1],
+                          icons[int][4]['color'][2],
+                          1),
+                    ),
+                  ),
+                  IconButton(
+                    onPressed: () {
+                      setState(() {
+                        widget.formData['icon'] = icons[int][5]['icon'];
+                        _resetColor();
+                        icons[int][5]['color'] = [100, 181, 246];
+                      });
+                    },
+                    icon: Icon(
+                      IconData(icons[int][5]['icon'],
+                          fontFamily: 'MaterialIcons'),
+                      color: Color.fromRGBO(
+                          icons[int][5]['color'][0],
+                          icons[int][5]['color'][1],
+                          icons[int][5]['color'][2],
+                          1),
+                    ),
+                  ),
+                ],
+              );
+            },
+          ),
         ),
         SizedBox(
           height: 10,
@@ -114,6 +218,10 @@ class _CreateNewList extends State<CreateNewList> {
           child: Text('Create'),
           onPressed: () {
             _formKey.currentState.save();
+            if (!_formKey.currentState.validate() ||
+                widget.formData['fullPermissions'] == null) {
+              return;
+            }
             final Uuid uuid = new Uuid();
             final String newID = uuid.v1();
             widget.formData['id'] = newID;
@@ -135,14 +243,7 @@ class _CreateNewList extends State<CreateNewList> {
       ),
       body: Container(
         padding: EdgeInsets.all(20.0),
-        child: Form(
-            key: _formKey,
-            child: !firstPart
-                ? _returnTitleAndPermissions(context)
-                : _returnIconChooseArea(context)),
-      ),
-      bottomSheet: LinearProgressIndicator(
-        value: !firstPart ? 0.5 : 1.0,
+        child: Form(key: _formKey, child: _returnIconChooseArea(context)),
       ),
     );
   }
