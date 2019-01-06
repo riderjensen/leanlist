@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
 
+import '../scoped-models/main_model.dart';
+
 class AuthPage extends StatefulWidget {
+  final MainModel listModel;
+
+  AuthPage(this.listModel);
+
   @override
   State<StatefulWidget> createState() {
     return _AuthPage();
@@ -8,7 +14,11 @@ class AuthPage extends StatefulWidget {
 }
 
 class _AuthPage extends State<AuthPage> {
-  final Map<String, String> _formData = {'code': null};
+  final Map<String, String> _formData = {
+    'username': null,
+    'email': null,
+    'password': null
+  };
   static GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
@@ -47,6 +57,17 @@ class _AuthPage extends State<AuthPage> {
                       height: 20.0,
                     ),
                     TextFormField(
+                      onSaved: (String value) {
+                        _formData['username'] = value;
+                      },
+                      validator: (String value) {
+                        if (value.isEmpty) {
+                          return 'A username is required';
+                        }
+                        if (value.length <= 5) {
+                          return 'Username must be longer than 5 characters';
+                        }
+                      },
                       decoration: InputDecoration(
                         labelText: 'Username',
                         filled: true,
@@ -57,11 +78,22 @@ class _AuthPage extends State<AuthPage> {
                       height: 10.0,
                     ),
                     TextFormField(
+                      onSaved: (value) {
+                        _formData['password'] = value;
+                      },
                       decoration: InputDecoration(
                         labelText: 'Password',
                         filled: true,
                         fillColor: Colors.white,
                       ),
+                      validator: (String value) {
+                        if (value.isEmpty) {
+                          return 'A password is required';
+                        }
+                        if (value.length <= 5) {
+                          return 'Password must be longer than 5 characters';
+                        }
+                      },
                       obscureText: true,
                     ),
                     SizedBox(
@@ -72,6 +104,14 @@ class _AuthPage extends State<AuthPage> {
                       color: Colors.blue,
                       textColor: Colors.white,
                       onPressed: () {
+                        _formKey.currentState.save();
+                        if (!_formKey.currentState.validate()) {
+                          return;
+                        }
+                        widget.listModel.signIn(
+                          _formData['username'],
+                          _formData['password'],
+                        );
                         Navigator.of(context).pushReplacementNamed('/lists');
                       },
                     )
