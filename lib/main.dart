@@ -19,18 +19,19 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  final MainModel listModel = MainModel();
+  final MainModel _listModel = MainModel();
 
   @override
   void initState() {
     // use items on _model in order to verify user
+    _listModel.setUserLists();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return ScopedModel<MainModel>(
-      model: listModel,
+      model: _listModel,
       child: MaterialApp(
         title: 'Lean List',
         theme: ThemeData(
@@ -38,8 +39,8 @@ class _MyAppState extends State<MyApp> {
         ),
         home: AuthPage(),
         routes: {
-          '/lists': (BuildContext context) => MyHomePage(listModel),
-          '/create': (BuildContext context) => CreateNewList(ourList, firstUser)
+          '/lists': (BuildContext context) => MyHomePage(_listModel),
+          '/create': (BuildContext context) => CreateNewList(_listModel)
         },
         onGenerateRoute: (RouteSettings settings) {
           final List<String> pathElements = settings.name.split('/');
@@ -48,15 +49,17 @@ class _MyAppState extends State<MyApp> {
           }
           if (pathElements[1] == 'list') {
             final String listId = pathElements[2];
+            _listModel.selectAListCode(listId);
             return MaterialPageRoute<bool>(
-              builder: (BuildContext context) => ListOneList(listId),
+              builder: (BuildContext context) =>
+                  ListOneList(_listModel.getOneList),
             );
           }
           return null;
         },
         onUnknownRoute: (RouteSettings settings) {
           return MaterialPageRoute(
-              builder: (BuildContext context) => MyHomePage(listModel));
+              builder: (BuildContext context) => MyHomePage(_listModel));
         },
       ),
     );
