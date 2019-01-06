@@ -6,11 +6,7 @@ import '../resources/dummyData.dart';
 
 mixin ConnectedLists on Model {
   List<ListModel> _userLists = [];
-  UserModel _authenticatedUser = new UserModel(
-    username: 'Riderjensen',
-    email: 'riderjensen@gmail.com',
-    lists: ['c750f160', 'cba0c380'],
-  );
+  UserModel _authenticatedUser;
   String _selectedListCode;
 }
 
@@ -54,5 +50,23 @@ mixin GetListInformation on ConnectedLists {
 
   void addANewList(String code) {
     _authenticatedUser.lists.add(code);
+  }
+
+  void signIn(String username, String password) {
+    // check the user against the DB
+    _authenticatedUser = new UserModel(
+      username: username,
+      email: 'riderjensen@gmail.com',
+      lists: ['c750f160', 'cba0c380'],
+    );
+  }
+
+  void signUp(String username, String email, String password) {
+    // put in db
+    _authenticatedUser = new UserModel(
+      username: username,
+      email: email,
+      lists: ['c750f160', 'cba0c380'],
+    );
   }
 }
