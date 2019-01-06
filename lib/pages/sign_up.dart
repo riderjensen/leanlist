@@ -2,18 +2,18 @@ import 'package:flutter/material.dart';
 
 import '../scoped-models/main_model.dart';
 
-class AuthPage extends StatefulWidget {
+class SignUp extends StatefulWidget {
   final MainModel listModel;
 
-  AuthPage(this.listModel);
+  SignUp(this.listModel);
 
   @override
   State<StatefulWidget> createState() {
-    return _AuthPage();
+    return _SignUp();
   }
 }
 
-class _AuthPage extends State<AuthPage> {
+class _SignUp extends State<SignUp> {
   final Map<String, String> _formData = {
     'username': null,
     'email': null,
@@ -27,7 +27,7 @@ class _AuthPage extends State<AuthPage> {
       body: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: AssetImage('assets/bg.gif'),
+            image: AssetImage('assets/bg1.gif'),
             fit: BoxFit.cover,
             colorFilter: ColorFilter.mode(
                 Colors.black.withOpacity(0.3), BlendMode.dstATop),
@@ -45,7 +45,7 @@ class _AuthPage extends State<AuthPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     Text(
-                      'Lean List',
+                      'Sign Up On Lean List',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 25.0,
@@ -55,6 +55,24 @@ class _AuthPage extends State<AuthPage> {
                     ),
                     SizedBox(
                       height: 20.0,
+                    ),
+                    TextFormField(
+                      onSaved: (String value) {
+                        _formData['email'] = value;
+                      },
+                      validator: (String value) {
+                        if (value.isEmpty) {
+                          return 'An email is required';
+                        }
+                      },
+                      decoration: InputDecoration(
+                        labelText: 'Email',
+                        filled: true,
+                        fillColor: Colors.white,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 10.0,
                     ),
                     TextFormField(
                       onSaved: (String value) {
@@ -99,18 +117,18 @@ class _AuthPage extends State<AuthPage> {
                     SizedBox(
                       height: 10.0,
                     ),
-                    Text('Dont have an account?'),
+                    Text('Already have an account?'),
                     GestureDetector(
-                      child: Text('Sign Up'),
+                      child: Text('Sign In'),
                       onTap: () {
-                        Navigator.of(context).pushReplacementNamed('/sign_up');
+                        Navigator.of(context).pushReplacementNamed('/auth');
                       },
                     ),
                     SizedBox(
                       height: 10.0,
                     ),
                     RaisedButton(
-                      child: Text('Log In'),
+                      child: Text('Sign Up'),
                       color: Colors.blue,
                       textColor: Colors.white,
                       onPressed: () {
@@ -118,8 +136,9 @@ class _AuthPage extends State<AuthPage> {
                         if (!_formKey.currentState.validate()) {
                           return;
                         }
-                        widget.listModel.signIn(
+                        widget.listModel.signUp(
                           _formData['username'],
+                          _formData['email'],
                           _formData['password'],
                         );
                         Navigator.of(context).pushReplacementNamed('/lists');

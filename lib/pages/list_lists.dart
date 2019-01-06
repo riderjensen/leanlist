@@ -28,7 +28,7 @@ class _ListLists extends State<ListLists> {
   Widget build(BuildContext context) {
     return Center(
         child: widget._listModel.userLists == null ||
-                widget._listModel.userLists == []
+                widget._listModel.userLists.isEmpty
             ? returnEmpty()
             : MainListCard(widget._listModel));
   }
