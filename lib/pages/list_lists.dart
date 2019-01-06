@@ -4,9 +4,9 @@ import '../scoped-models/main_model.dart';
 import '../ui_elements/main_list_card.dart';
 
 class ListLists extends StatefulWidget {
-  final MainModel listModel;
+  final MainModel _listModel;
 
-  ListLists(this.listModel);
+  ListLists(this._listModel);
 
   @override
   State<StatefulWidget> createState() {
@@ -16,8 +16,6 @@ class ListLists extends StatefulWidget {
 
 class _ListLists extends State<ListLists> {
   Widget returnEmpty() {
-    print(widget.listModel.toString());
-
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
@@ -29,8 +27,9 @@ class _ListLists extends State<ListLists> {
   @override
   Widget build(BuildContext context) {
     return Center(
-        child: widget.listModel.userLists() == null
+        child: widget._listModel.userLists == null ||
+                widget._listModel.userLists == []
             ? returnEmpty()
-            : MainListCard(ourList, firstUser));
+            : MainListCard(widget._listModel.userLists));
   }
 }
