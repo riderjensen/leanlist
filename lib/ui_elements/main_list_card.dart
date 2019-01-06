@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import '../models/list_model.dart';
-import '../models/user.dart';
 
 class MainListCard extends StatefulWidget {
   final List<ListModel> ourList;
-  final UserModel ourUser;
 
-  MainListCard(this.ourList, this.ourUser);
+  MainListCard(this.ourList);
 
   @override
   State<StatefulWidget> createState() {
@@ -30,7 +28,8 @@ class _MainListCard extends State<MainListCard> {
             title: Text(widget.ourList[int].title),
             subtitle: Text('Creator: ${widget.ourList[int].creator}'),
             onTap: () {
-              Navigator.pushNamed<dynamic>(context, '/list/' + int.toString());
+              Navigator.pushNamed<dynamic>(
+                  context, '/list/' + widget.ourList[int].shareId);
             }),
       ],
     );
