@@ -30,6 +30,6 @@ class _ListLists extends State<ListLists> {
         child: widget._listModel.userLists == null ||
                 widget._listModel.userLists == []
             ? returnEmpty()
-            : MainListCard(widget._listModel.userLists));
+            : MainListCard(widget._listModel));
   }
 }

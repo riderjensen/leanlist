@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+
 import '../models/list_model.dart';
+import '../scoped-models/main_model.dart';
 
 class MainListCard extends StatefulWidget {
-  final List<ListModel> ourList;
+  final MainModel theMainModel;
 
-  MainListCard(this.ourList);
+  MainListCard(this.theMainModel);
 
   @override
   State<StatefulWidget> createState() {
@@ -16,26 +18,25 @@ class _MainListCard extends State<MainListCard> {
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
       new GlobalKey<RefreshIndicatorState>();
   bool ourCardDelete = false;
-
-  Widget _oneSideCard(int) {
+  Widget _oneSideCard(int, List<ListModel> ourList) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         ListTile(
             leading: Icon(
-              IconData(widget.ourList[int].icon, fontFamily: 'MaterialIcons'),
+              IconData(ourList[int].icon, fontFamily: 'MaterialIcons'),
             ),
-            title: Text(widget.ourList[int].title),
-            subtitle: Text('Creator: ${widget.ourList[int].creator}'),
+            title: Text(ourList[int].title),
+            subtitle: Text('Creator: ${ourList[int].creator}'),
             onTap: () {
               Navigator.pushNamed<dynamic>(
-                  context, '/list/' + widget.ourList[int].shareId);
+                  context, '/list/' + ourList[int].shareId);
             }),
       ],
     );
   }
 
-  Widget _deleteSideCard(int) {
+  Widget _deleteSideCard(int, List<ListModel> ourList) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
@@ -46,29 +47,31 @@ class _MainListCard extends State<MainListCard> {
               color: Colors.red,
               icon: Icon(Icons.delete),
               onPressed: () {
-                // remove this item from the list
+                setState(() {
+                  widget.theMainModel.removeAList(ourList[int].shareId);
+                });
               },
             ),
-            title: Text(widget.ourList[int].title),
-            subtitle: Text('Creator: ${widget.ourList[int].creator}'),
+            title: Text(ourList[int].title),
+            subtitle: Text('Creator: ${ourList[int].creator}'),
           ),
         )
       ],
     );
   }
 
-  Widget returnCard(int) {
+  Widget returnCard(int, List<ListModel> ourList) {
     return GestureDetector(
       onLongPress: () {
         setState(() {
-          widget.ourList[int].toggleDelete = !widget.ourList[int].toggleDelete;
+          ourList[int].toggleDelete = !ourList[int].toggleDelete;
         });
       },
       child: Center(
         child: Card(
-            child: widget.ourList[int].toggleDelete
-                ? _deleteSideCard(int)
-                : _oneSideCard(int)),
+            child: ourList[int].toggleDelete
+                ? _deleteSideCard(int, ourList)
+                : _oneSideCard(int, ourList)),
       ),
     );
   }
@@ -82,13 +85,15 @@ class _MainListCard extends State<MainListCard> {
 
   @override
   Widget build(BuildContext context) {
+    final List<ListModel> ourList = widget.theMainModel.userLists;
+
     return RefreshIndicator(
         key: _refreshIndicatorKey,
         onRefresh: _refresh,
         child: ListView.builder(
-          itemCount: widget.ourList.length,
+          itemCount: ourList.length,
           itemBuilder: (context, int) {
-            return returnCard(int);
+            return returnCard(int, ourList);
           },
         ));
   }

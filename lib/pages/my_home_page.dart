@@ -5,7 +5,6 @@ import '../widgets/home_fab.dart';
 import '../scoped-models/main_model.dart';
 
 class MyHomePage extends StatelessWidget {
-  final String title = 'Lists';
   final MainModel _listModel;
 
   MyHomePage(this._listModel);
@@ -14,7 +13,7 @@ class MyHomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(title),
+        title: Text('${_listModel.authUser.username}\'s Lists'),
       ),
       body: ListLists(_listModel),
       floatingActionButton: HomeFab(),
