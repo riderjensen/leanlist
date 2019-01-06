@@ -7,6 +7,7 @@ import './widgets/home_fab.dart';
 import './pages/list_lists.dart';
 import './pages/list_one_list.dart';
 import './pages/create_new_list.dart';
+import './pages/auth.dart';
 
 void main() => runApp(MyApp());
 
@@ -19,8 +20,9 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(),
+      home: AuthPage(),
       routes: {
+        '/lists': (BuildContext context) => MyHomePage(),
         '/create': (BuildContext context) => CreateNewList(ourList, firstUser)
       },
       onGenerateRoute: (RouteSettings settings) {

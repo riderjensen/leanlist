@@ -7,6 +7,7 @@ class ListModel {
   final int icon;
   final String creator;
   final bool fullPermissions;
+  bool toggleDelete;
   final Map<String, List> items;
 
   ListModel({
@@ -16,6 +17,7 @@ class ListModel {
     @required this.icon,
     @required this.creator,
     @required this.fullPermissions,
+    @required this.toggleDelete,
     @required this.items,
   });
 }

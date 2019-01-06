@@ -232,7 +232,7 @@ class _CreateNewList extends State<CreateNewList> {
             widget.firstUser.lists.add(newID.split('-')[0]);
             // await putting into db
             Navigator.of(context).pop();
-            Navigator.of(context).pushReplacementNamed('/');
+            Navigator.of(context).pushReplacementNamed('/home');
           },
         )
       ],
