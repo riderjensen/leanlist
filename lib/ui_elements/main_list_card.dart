@@ -13,6 +13,8 @@ class MainListCard extends StatefulWidget {
 }
 
 class _MainListCard extends State<MainListCard> {
+  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
+      new GlobalKey<RefreshIndicatorState>();
   Widget returnCard(int) {
     return Center(
       child: Card(
@@ -34,13 +36,23 @@ class _MainListCard extends State<MainListCard> {
     );
   }
 
+  Future<void> _refresh() {
+    return Future.delayed(
+        Duration(seconds: 1),
+        () =>
+            'Our future returning that will contact the db and get updated lists');
+  }
+
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: widget.ourList.length,
-      itemBuilder: (context, int) {
-        return returnCard(int);
-      },
-    );
+    return RefreshIndicator(
+        key: _refreshIndicatorKey,
+        onRefresh: _refresh,
+        child: ListView.builder(
+          itemCount: widget.ourList.length,
+          itemBuilder: (context, int) {
+            return returnCard(int);
+          },
+        ));
   }
 }
