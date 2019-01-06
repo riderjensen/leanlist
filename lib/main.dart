@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 
 import './scoped-models/main_model.dart';
-import './resources/dummyData.dart';
-import './resources/dummyUser.dart';
 import './pages/my_home_page.dart';
 import './pages/list_one_list.dart';
 import './pages/create_new_list.dart';
@@ -23,8 +21,11 @@ class _MyAppState extends State<MyApp> {
 
   @override
   void initState() {
-    // use items on _model in order to verify user
-    _listModel.setUserLists();
+    //TODO
+    //Get user information that is stored on the phone and set the auth user
+    if (_listModel.authUser != null) {
+      _listModel.setUserLists();
+    }
     super.initState();
   }
 
@@ -37,7 +38,9 @@ class _MyAppState extends State<MyApp> {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home: AuthPage(),
+        home: _listModel.authUser == null
+            ? AuthPage(_listModel)
+            : MyHomePage(_listModel),
         routes: {
           '/lists': (BuildContext context) => MyHomePage(_listModel),
           '/create': (BuildContext context) => CreateNewList(_listModel)
