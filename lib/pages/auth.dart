@@ -99,6 +99,16 @@ class _AuthPage extends State<AuthPage> {
                     SizedBox(
                       height: 10.0,
                     ),
+                    Text('Dont have an account?'),
+                    GestureDetector(
+                      child: Text('Sign Up'),
+                      onTap: () {
+                        Navigator.of(context).pushReplacementNamed('/sign_up');
+                      },
+                    ),
+                    SizedBox(
+                      height: 10.0,
+                    ),
                     RaisedButton(
                       child: Text('Log In'),
                       color: Colors.blue,
