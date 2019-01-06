@@ -105,7 +105,6 @@ class _ListOneList extends State<ListOneList> {
   @override
   Widget build(BuildContext context) {
     ListModel ourItem = ourList[int.parse(widget.listId)];
-    print(ourItem.items);
     return DefaultTabController(
       length: 2,
       child: Scaffold(
