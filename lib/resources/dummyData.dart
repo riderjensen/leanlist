@@ -7,6 +7,7 @@ final ListModel pracModel3 = new ListModel(
     icon: 0xe193,
     creator: 'Rider',
     fullPermissions: false,
+    toggleDelete: false,
     items: {
       'incomplete': [
         'Here is an undone item on list two',
@@ -129,6 +130,7 @@ final ListModel pracModel2 = new ListModel(
     icon: 0xe191,
     creator: 'Rider',
     fullPermissions: true,
+    toggleDelete: false,
     items: {
       'incomplete': [
         'Here is an undone item on list two',
@@ -145,6 +147,7 @@ final ListModel pracModel1 = new ListModel(
     icon: 0xe192,
     creator: 'Rider',
     fullPermissions: true,
+    toggleDelete: false,
     items: {
       'incomplete': [
         'Here is an undone item',
