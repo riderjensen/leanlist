@@ -13,8 +13,9 @@ class CompletedListTile extends StatefulWidget {
 class _CompletedListTile extends State<CompletedListTile> {
   @override
   Widget build(BuildContext context) {
-    final List<Map> items = widget.ourList['complete'];
-    return items[0].isEmpty
+    final List<dynamic> items = widget.ourList['complete'];
+
+    return items.isEmpty
         ? Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
