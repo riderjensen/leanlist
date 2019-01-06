@@ -6,6 +6,7 @@ import './pages/my_home_page.dart';
 import './pages/list_one_list.dart';
 import './pages/create_new_list.dart';
 import './pages/auth.dart';
+import './pages/sign_up.dart';
 
 void main() => runApp(MyApp());
 
@@ -42,6 +43,8 @@ class _MyAppState extends State<MyApp> {
             ? AuthPage(_listModel)
             : MyHomePage(_listModel),
         routes: {
+          '/auth': (BuildContext context) => AuthPage(_listModel),
+          '/sign_up': (BuildContext context) => SignUp(_listModel),
           '/lists': (BuildContext context) => MyHomePage(_listModel),
           '/create': (BuildContext context) => CreateNewList(_listModel)
         },
