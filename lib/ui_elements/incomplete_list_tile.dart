@@ -52,9 +52,12 @@ class _IncompleteListTile extends State<IncompleteListTile> {
                           leading: const Icon(Icons.check_box_outline_blank),
                           title: Text(items[int]),
                           onTap: () {
+                            final DateTime date = new DateTime.now().toLocal();
+                            final String dateCompleted =
+                                '${date.month}/${date.day}/${date.year} ${date.hour > 12 ? date.hour - 12 : date.hour}:${date.minute} ${date.hour > 12 ? 'pm' : 'am'}';
                             widget.ourList['complete'].add({
                               'item': items[int].toString(),
-                              'date': new DateTime.now().toLocal().toString(),
+                              'date': dateCompleted,
                               'userCom': widget.username
                             });
                             setState(() {
