@@ -6,9 +6,9 @@ import '../scoped-models/main_model.dart';
 
 class MyHomePage extends StatelessWidget {
   final String title = 'Lists';
-  final MainModel listModel;
+  final MainModel _listModel;
 
-  MyHomePage(this.listModel);
+  MyHomePage(this._listModel);
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +16,7 @@ class MyHomePage extends StatelessWidget {
       appBar: AppBar(
         title: Text(title),
       ),
-      body: ListLists(listModel),
+      body: ListLists(_listModel),
       floatingActionButton: HomeFab(),
     );
   }
