@@ -1,19 +1,25 @@
 import 'package:flutter/material.dart';
 
+import '../scoped-models/main_model.dart';
 import '../ui_elements/main_list_card.dart';
-import '../models/list_model.dart';
-import '../models/user.dart';
 
-class ListLists extends StatelessWidget {
-  final List<ListModel> ourList;
-  final UserModel firstUser;
-  ListLists(this.ourList, this.firstUser);
+class ListLists extends StatefulWidget {
+  final MainModel _listModel;
 
+  ListLists(this._listModel);
+
+  @override
+  State<StatefulWidget> createState() {
+    return _ListLists();
+  }
+}
+
+class _ListLists extends State<ListLists> {
   Widget returnEmpty() {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        Text('No list currently created.'),
+        Text('No lists currently created.'),
       ],
     );
   }
@@ -21,7 +27,9 @@ class ListLists extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-        child:
-            ourList == null ? returnEmpty() : MainListCard(ourList, firstUser));
+        child: widget._listModel.userLists == null ||
+                widget._listModel.userLists == []
+            ? returnEmpty()
+            : MainListCard(widget._listModel.userLists));
   }
 }

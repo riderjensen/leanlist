@@ -1,68 +1,67 @@
 import 'package:flutter/material.dart';
+import 'package:scoped_model/scoped_model.dart';
 
+import './scoped-models/main_model.dart';
 import './resources/dummyData.dart';
 import './resources/dummyUser.dart';
-import './models/list_model.dart';
-import './widgets/home_fab.dart';
-import './pages/list_lists.dart';
+import './pages/my_home_page.dart';
 import './pages/list_one_list.dart';
 import './pages/create_new_list.dart';
 import './pages/auth.dart';
 
 void main() => runApp(MyApp());
 
-class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
+class MyApp extends StatefulWidget {
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Lean List',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: AuthPage(),
-      routes: {
-        '/lists': (BuildContext context) => MyHomePage(),
-        '/create': (BuildContext context) => CreateNewList(ourList, firstUser)
-      },
-      onGenerateRoute: (RouteSettings settings) {
-        final List<String> pathElements = settings.name.split('/');
-        if (pathElements[0] != '') {
-          return null;
-        }
-        if (pathElements[1] == 'list') {
-          final String listId = pathElements[2];
-          return MaterialPageRoute<bool>(
-            builder: (BuildContext context) => ListOneList(listId),
-          );
-        }
-        return null;
-      },
-      onUnknownRoute: (RouteSettings settings) {
-        return MaterialPageRoute(
-            builder: (BuildContext context) => MyHomePage());
-      },
-    );
+  State<StatefulWidget> createState() {
+    return _MyAppState();
   }
 }
 
-class MyHomePage extends StatelessWidget {
-  final String title = 'Lists';
+class _MyAppState extends State<MyApp> {
+  final MainModel _listModel = MainModel();
+
+  @override
+  void initState() {
+    // use items on _model in order to verify user
+    _listModel.setUserLists();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    List<ListModel> myNewestList = [];
-    firstUser.lists.forEach((listId) {
-      myNewestList
-          .add(ourList[ourList.indexWhere((item) => item.shareId == listId)]);
-    });
-
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(title),
+    return ScopedModel<MainModel>(
+      model: _listModel,
+      child: MaterialApp(
+        title: 'Lean List',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+        ),
+        home: AuthPage(),
+        routes: {
+          '/lists': (BuildContext context) => MyHomePage(_listModel),
+          '/create': (BuildContext context) => CreateNewList(_listModel)
+        },
+        onGenerateRoute: (RouteSettings settings) {
+          final List<String> pathElements = settings.name.split('/');
+          if (pathElements[0] != '') {
+            return null;
+          }
+          if (pathElements[1] == 'list') {
+            final String listId = pathElements[2];
+            _listModel.selectAListCode(listId);
+            return MaterialPageRoute<bool>(
+              builder: (BuildContext context) =>
+                  ListOneList(_listModel.getOneList),
+            );
+          }
+          return null;
+        },
+        onUnknownRoute: (RouteSettings settings) {
+          return MaterialPageRoute(
+              builder: (BuildContext context) => MyHomePage(_listModel));
+        },
       ),
-      body: ListLists(myNewestList, firstUser),
-      floatingActionButton: HomeFab(),
     );
   }
 }

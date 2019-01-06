@@ -3,18 +3,17 @@ import 'package:uuid/uuid.dart';
 
 import '../resources/icon_list.dart';
 import '../models/list_model.dart';
-import '../models/user.dart';
+import '../scoped-models/main_model.dart';
 
 class CreateNewList extends StatefulWidget {
-  final List ourList;
-  final UserModel firstUser;
+  final MainModel _listModel;
 
   final Map<String, dynamic> formData = {
     'fullPermissions': true,
     'icon': 0xe192,
   };
 
-  CreateNewList(this.ourList, this.firstUser);
+  CreateNewList(this._listModel);
 
   @override
   State<StatefulWidget> createState() {
@@ -222,14 +221,15 @@ class _CreateNewList extends State<CreateNewList> {
             final ListModel newestAddition = new ListModel(
               id: newID,
               shareId: newID.split('-')[0],
-              creator: widget.firstUser.username,
+              creator: widget._listModel.authUser.username,
               icon: widget.formData['icon'],
               title: widget.formData['title'],
               fullPermissions: widget.formData['fullPermissions'],
+              toggleDelete: false,
               items: {'incomplete': [], 'complete': []},
             );
-            widget.ourList.add(newestAddition);
-            widget.firstUser.lists.add(newID.split('-')[0]);
+            widget._listModel.addANewList(newID.split('-')[0]);
+            widget._listModel.addToUserLists(newestAddition);
             // await putting into db
             Navigator.of(context).pop();
             Navigator.of(context).pushReplacementNamed('/home');
