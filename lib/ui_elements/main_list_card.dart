@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import '../models/list_model.dart';
+import '../models/user.dart';
 
 class MainListCard extends StatefulWidget {
   final List<ListModel> ourList;
-
-  MainListCard(this.ourList);
+  final UserModel ourUser;
+  MainListCard(this.ourList, this.ourUser);
 
   @override
   State<StatefulWidget> createState() {

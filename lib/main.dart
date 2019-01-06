@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 import './resources/dummyData.dart';
-
+import './resources/dummyUser.dart';
+import './models/list_model.dart';
 import './widgets/home_fab.dart';
 import './pages/list_lists.dart';
 import './pages/list_one_list.dart';
@@ -19,7 +20,9 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       home: MyHomePage(),
-      routes: {'/create': (BuildContext context) => CreateNewList(ourList)},
+      routes: {
+        '/create': (BuildContext context) => CreateNewList(ourList, firstUser)
+      },
       onGenerateRoute: (RouteSettings settings) {
         final List<String> pathElements = settings.name.split('/');
         if (pathElements[0] != '') {
@@ -46,11 +49,17 @@ class MyHomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    List<ListModel> myNewestList = [];
+    firstUser.lists.forEach((listId) {
+      myNewestList
+          .add(ourList[ourList.indexWhere((item) => item.shareId == listId)]);
+    });
+
     return Scaffold(
       appBar: AppBar(
         title: Text(title),
       ),
-      body: ListLists(ourList),
+      body: ListLists(myNewestList, firstUser),
       floatingActionButton: HomeFab(),
     );
   }
