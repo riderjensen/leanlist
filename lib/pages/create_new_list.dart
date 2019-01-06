@@ -226,6 +226,7 @@ class _CreateNewList extends State<CreateNewList> {
               icon: widget.formData['icon'],
               title: widget.formData['title'],
               fullPermissions: widget.formData['fullPermissions'],
+              toggleDelete: false,
               items: {'incomplete': [], 'complete': []},
             );
             widget.ourList.add(newestAddition);
