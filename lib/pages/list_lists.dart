@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 
 import '../ui_elements/main_list_card.dart';
+import '../models/list_model.dart';
 
 class ListLists extends StatelessWidget {
-  final List ourList;
+  final List<ListModel> ourList;
 
   ListLists(this.ourList);
 

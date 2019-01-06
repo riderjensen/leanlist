@@ -17,6 +17,7 @@ class AddListDialog extends StatelessWidget {
               child: Column(
                 children: <Widget>[
                   TextFormField(
+                    autofocus: true,
                     onSaved: (String value) {
                       _formData['code'] = value;
                     },
