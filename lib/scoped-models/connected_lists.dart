@@ -48,6 +48,10 @@ mixin GetListInformation on ConnectedLists {
     });
   }
 
+  void removeAList(String incShareId) {
+    _userLists.removeWhere((item) => item.shareId == incShareId);
+  }
+
   void addANewList(String code) {
     _authenticatedUser.lists.add(code);
   }
