@@ -6,9 +6,10 @@ import '../ui_elements/incomplete_list_tile.dart';
 
 class ListOneList extends StatefulWidget {
   final ListModel oneList;
+  final String theUsername;
   final Map<String, String> _formData = {'item': null};
 
-  ListOneList(this.oneList);
+  ListOneList(this.oneList, this.theUsername);
   @override
   State<StatefulWidget> createState() {
     return _ListOneList();
@@ -141,7 +142,7 @@ class _ListOneList extends State<ListOneList> {
         ),
         body: TabBarView(
           children: <Widget>[
-            IncompleteListTile(ourItem.items),
+            IncompleteListTile(ourItem.items, widget.theUsername),
             CompletedListTile(ourItem.items),
           ],
         ),
