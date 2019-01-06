@@ -3,7 +3,7 @@ import '../models/list_model.dart';
 final ListModel pracModel3 = new ListModel(
     id: 'c11777b0-0b50-11e9-fa15-4781cd3d8c2f',
     shareId: 'c11777b0',
-    title: 'My second list',
+    title: 'My third list',
     icon: 0xe193,
     creator: 'Rider',
     fullPermissions: false,
