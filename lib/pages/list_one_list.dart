@@ -7,7 +7,6 @@ import '../ui_elements/incomplete_list_tile.dart';
 class ListOneList extends StatefulWidget {
   final String listId;
   final Map<String, String> _formData = {'item': null};
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   ListOneList(this.listId);
   @override
@@ -17,6 +16,8 @@ class ListOneList extends StatefulWidget {
 }
 
 class _ListOneList extends State<ListOneList> {
+  static GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
   Future<void> _createShareAlert(BuildContext context, String shareId) async {
     return showDialog<void>(
       context: context,
@@ -55,7 +56,7 @@ class _ListOneList extends State<ListOneList> {
             child: ListBody(
               children: <Widget>[
                 Form(
-                  key: widget._formKey,
+                  key: _formKey,
                   child: Column(
                     children: <Widget>[
                       TextFormField(
@@ -84,8 +85,8 @@ class _ListOneList extends State<ListOneList> {
             FlatButton(
               child: Text('Add'),
               onPressed: () {
-                widget._formKey.currentState.save();
-                if (!widget._formKey.currentState.validate()) {
+                _formKey.currentState.save();
+                if (!_formKey.currentState.validate()) {
                   return;
                 }
                 setState(() {
@@ -114,7 +115,15 @@ class _ListOneList extends State<ListOneList> {
               onPressed: () {
                 _createShareAlert(context, ourItem['shareId']);
               },
-            )
+            ),
+            IconButton(
+              icon: Icon(Icons.add),
+              onPressed: () {
+                setState(() {
+                  _createAddItemDialog(context, ourItem['items']['incomplete']);
+                });
+              },
+            ),
           ],
           bottom: TabBar(
             tabs: <Widget>[
@@ -134,17 +143,6 @@ class _ListOneList extends State<ListOneList> {
             IncompleteListTile(ourItem['items']),
             CompletedListTile(ourItem['items']),
           ],
-        ),
-        floatingActionButton: FloatingActionButton(
-          backgroundColor: Theme.of(context).primaryColor,
-          heroTag: 'addItem',
-          onPressed: () {
-            _createAddItemDialog(context, ourItem['items']['incomplete']);
-          },
-          child: Icon(
-            Icons.add,
-            color: Theme.of(context).cardColor,
-          ),
         ),
       ),
     );
