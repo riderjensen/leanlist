@@ -5,10 +5,10 @@ import '../ui_elements/completed_list_tile.dart';
 import '../ui_elements/incomplete_list_tile.dart';
 
 class ListOneList extends StatefulWidget {
-  final String listId;
+  final ListModel oneList;
   final Map<String, String> _formData = {'item': null};
 
-  ListOneList(this.listId);
+  ListOneList(this.oneList);
   @override
   State<StatefulWidget> createState() {
     return _ListOneList();
@@ -103,7 +103,8 @@ class _ListOneList extends State<ListOneList> {
 
   @override
   Widget build(BuildContext context) {
-    ListModel ourItem = ourList[int.parse(widget.listId)];
+    ListModel ourItem = widget.oneList;
+
     return DefaultTabController(
       length: 2,
       child: Scaffold(
