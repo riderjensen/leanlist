@@ -137,7 +137,7 @@ final ListModel pracModel2 = new ListModel(
         'here is the second undone item on list two',
         'here is the thrid undone item on list two'
       ],
-      'complete': [{}]
+      'complete': []
     });
 
 final ListModel pracModel1 = new ListModel(
