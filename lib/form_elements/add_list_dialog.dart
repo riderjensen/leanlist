@@ -49,7 +49,7 @@ class AddListDialog extends StatelessWidget {
               return;
             }
             // this push isnt working, need to basically refresh the home page
-            Navigator.pushReplacementNamed(context, '/');
+            Navigator.of(context).pop();
           },
         ),
       ],
