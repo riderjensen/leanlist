@@ -97,7 +97,6 @@ mixin GetListInformation on ConnectedLists {
 
       final Map<String, dynamic> allUsers = json.decode(fullUsersResponse.body);
       allUsers.forEach((String id, dynamic listData) {
-        print(listData);
         if (email == listData['email']) {
           _authenticatedUser = new UserModel(
             username: listData['username'],
@@ -105,7 +104,7 @@ mixin GetListInformation on ConnectedLists {
             lists: listData['lists'] == null ? [] : listData['lists'],
           );
         } else {
-          print('missed');
+          print('Something went terribly wrong with the DB');
         }
       });
       setUserLists();
