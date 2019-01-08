@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import '../scoped-models/main_model.dart';
@@ -14,11 +16,7 @@ class AuthPage extends StatefulWidget {
 }
 
 class _AuthPage extends State<AuthPage> {
-  final Map<String, String> _formData = {
-    'username': null,
-    'email': null,
-    'password': null
-  };
+  final Map<String, String> _formData = {'email': null, 'password': null};
   static GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
@@ -58,18 +56,15 @@ class _AuthPage extends State<AuthPage> {
                     ),
                     TextFormField(
                       onSaved: (String value) {
-                        _formData['username'] = value;
+                        _formData['email'] = value;
                       },
                       validator: (String value) {
                         if (value.isEmpty) {
-                          return 'A username is required';
-                        }
-                        if (value.length <= 5) {
-                          return 'Username must be longer than 5 characters';
+                          return 'An email is required';
                         }
                       },
                       decoration: InputDecoration(
-                        labelText: 'Username',
+                        labelText: 'Email',
                         filled: true,
                         fillColor: Colors.white,
                       ),
@@ -113,16 +108,22 @@ class _AuthPage extends State<AuthPage> {
                       child: Text('Log In'),
                       color: Colors.blue,
                       textColor: Colors.white,
-                      onPressed: () {
+                      onPressed: () async {
                         _formKey.currentState.save();
                         if (!_formKey.currentState.validate()) {
                           return;
                         }
-                        widget.listModel.signIn(
-                          _formData['username'],
+                        final Map<String, dynamic> information =
+                            await widget.listModel.signIn(
+                          _formData['email'],
                           _formData['password'],
                         );
-                        Navigator.of(context).pushReplacementNamed('/lists');
+                        if (information['success'] == true) {
+                          Navigator.of(context).pushReplacementNamed('/lists');
+                        } else {
+                          print(information['message']);
+                          // give error on sign up and send to user
+                        }
                       },
                     )
                   ],
