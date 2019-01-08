@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import '../scoped-models/main_model.dart';
@@ -12,6 +14,8 @@ class SignUp extends StatefulWidget {
     return _SignUp();
   }
 }
+
+void submittedForm() {}
 
 class _SignUp extends State<SignUp> {
   final Map<String, String> _formData = {
@@ -131,17 +135,23 @@ class _SignUp extends State<SignUp> {
                       child: Text('Sign Up'),
                       color: Colors.blue,
                       textColor: Colors.white,
-                      onPressed: () {
+                      onPressed: () async {
                         _formKey.currentState.save();
                         if (!_formKey.currentState.validate()) {
                           return;
                         }
-                        widget.listModel.signUp(
+                        final Map<String, dynamic> information =
+                            await widget.listModel.signUp(
                           _formData['username'],
                           _formData['email'],
                           _formData['password'],
                         );
-                        Navigator.of(context).pushReplacementNamed('/lists');
+                        if (information['success'] == true) {
+                          Navigator.of(context).pushReplacementNamed('/lists');
+                        } else {
+                          print(information['message']);
+                          // give error on sign up and send to user
+                        }
                       },
                     )
                   ],
