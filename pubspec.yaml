@@ -22,6 +22,7 @@ dependencies:
   flutter_fab_dialer: ^0.1.1
   uuid: ^1.0.3
   scoped_model: ^1.0.1
+  http: ^0.12.0
 
 
 dev_dependencies:
