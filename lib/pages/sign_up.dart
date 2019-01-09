@@ -15,7 +15,31 @@ class SignUp extends StatefulWidget {
   }
 }
 
-void submittedForm() {}
+Future<void> _alertSignUpIssue(BuildContext context, String message) async {
+  return showDialog<void>(
+    context: context,
+    barrierDismissible: false, // user must tap button!
+    builder: (BuildContext context) {
+      return AlertDialog(
+        content: SingleChildScrollView(
+          child: ListBody(
+            children: <Widget>[
+              Text(message),
+            ],
+          ),
+        ),
+        actions: <Widget>[
+          FlatButton(
+            child: Text('Okay'),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
+      );
+    },
+  );
+}
 
 class _SignUp extends State<SignUp> {
   final Map<String, String> _formData = {
@@ -86,8 +110,8 @@ class _SignUp extends State<SignUp> {
                         if (value.isEmpty) {
                           return 'A username is required';
                         }
-                        if (value.length <= 5) {
-                          return 'Username must be longer than 5 characters';
+                        if (value.length <= 2) {
+                          return 'Username must be longer than 2 characters';
                         }
                       },
                       decoration: InputDecoration(
@@ -149,8 +173,7 @@ class _SignUp extends State<SignUp> {
                         if (information['success'] == true) {
                           Navigator.of(context).pushReplacementNamed('/lists');
                         } else {
-                          print(information['message']);
-                          // give error on sign up and send to user
+                          _alertSignUpIssue(context, information['message']);
                         }
                       },
                     )
