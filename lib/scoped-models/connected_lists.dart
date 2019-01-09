@@ -34,7 +34,7 @@ mixin GetListInformation on ConnectedLists {
         _userLists.indexWhere((item) => item.shareId == _selectedListCode)];
   }
 
-  void addToUserLists(ListModel incomingListAddition) async {
+  Future addToUserLists(ListModel incomingListAddition) async {
     final Map<String, dynamic> myAddData = {
       'id': incomingListAddition.id,
       'shareId': incomingListAddition.shareId,
@@ -68,8 +68,11 @@ mixin GetListInformation on ConnectedLists {
     _userLists.removeWhere((item) => item.shareId == incShareId);
   }
 
-  void addANewList(String code) {
+  Future addANewList(String code) async {
     _authenticatedUser.lists.add(code);
+    //push new item to list in the DB
+    final http.Response addNewList =
+        await http.post('https://lean-list.firebaseio.com/users.json');
   }
 
   Future<Map<String, dynamic>> signIn(String email, String password) async {
@@ -83,9 +86,9 @@ mixin GetListInformation on ConnectedLists {
       body: jsonEncode(authData),
       headers: {'Content-Type': 'application/json'},
     );
-
     final Map<String, dynamic> theUserResponseDecoded =
         jsonDecode(userResponse.body);
+
     if (theUserResponseDecoded.containsKey('error')) {
       return {
         'success': false,
@@ -99,6 +102,7 @@ mixin GetListInformation on ConnectedLists {
       allUsers.forEach((String id, dynamic listData) {
         if (email == listData['email']) {
           _authenticatedUser = new UserModel(
+            firebaseId: listData['localId'],
             username: listData['username'],
             email: listData['email'],
             lists: listData['lists'] == null ? [] : listData['lists'],
@@ -150,6 +154,7 @@ mixin GetListInformation on ConnectedLists {
         };
       } else {
         _authenticatedUser = new UserModel(
+          firebaseId: theResponseDecoded['localId'],
           username: username,
           email: email,
           lists: [],
