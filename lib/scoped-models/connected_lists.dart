@@ -68,7 +68,7 @@ mixin GetListInformation on ConnectedLists {
     _userLists.removeWhere((item) => item.shareId == incShareId);
   }
 
-  Future addANewList(String code) async {
+  void addANewList(String code) async {
     _authenticatedUser.lists.add(code);
     //push new item to list in the DB
     final http.Response addNewList =
