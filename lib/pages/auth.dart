@@ -15,6 +15,32 @@ class AuthPage extends StatefulWidget {
   }
 }
 
+Future<void> _alertSignInIssue(BuildContext context, String message) async {
+  return showDialog<void>(
+    context: context,
+    barrierDismissible: false, // user must tap button!
+    builder: (BuildContext context) {
+      return AlertDialog(
+        content: SingleChildScrollView(
+          child: ListBody(
+            children: <Widget>[
+              Text(message),
+            ],
+          ),
+        ),
+        actions: <Widget>[
+          FlatButton(
+            child: Text('Okay'),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
+      );
+    },
+  );
+}
+
 class _AuthPage extends State<AuthPage> {
   final Map<String, String> _formData = {'email': null, 'password': null};
   static GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -121,8 +147,7 @@ class _AuthPage extends State<AuthPage> {
                         if (information['success'] == true) {
                           Navigator.of(context).pushReplacementNamed('/lists');
                         } else {
-                          print(information['message']);
-                          // give error on sign up and send to user
+                          _alertSignInIssue(context, information['message']);
                         }
                       },
                     )
