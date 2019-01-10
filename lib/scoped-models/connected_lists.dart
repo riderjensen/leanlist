@@ -8,7 +8,6 @@ import '../local_keys.dart';
 
 import '../models/list_model.dart';
 import '../models/user.dart';
-import '../resources/dummyData.dart';
 
 mixin ConnectedLists on Model {
   List<ListModel> _userLists = [];
@@ -49,37 +48,61 @@ mixin GetListInformation on ConnectedLists {
     http
         .post('https://lean-list.firebaseio.com/lists.json',
             body: json.encode(myAddData))
-        .then((_) {});
-  }
-
-  void selectAListCode(String code) {
-    _selectedListCode = code;
-  }
-
-  void setUserLists() {
-    _authenticatedUser.lists.forEach((listId) {
-      _userLists
-          .add(ourList[ourList.indexWhere((item) => item.shareId == listId)]);
+        .then((response) {
+      final Map<String, dynamic> returnedData = jsonDecode(response.body);
+      _authenticatedUser.lists.add(returnedData['name']);
+      updateUserInDB();
     });
   }
 
-  void removeAList(String incShareId) {
-    _userLists.removeWhere((item) => item.shareId == incShareId);
-  }
-
-  void addANewList(String code) async {
-    _authenticatedUser.lists.add(code);
+  void updateUserInDB() {
     final Map<String, dynamic> updatedUser = {
       'email': _authenticatedUser.email,
       'username': _authenticatedUser.username,
       'lists': _authenticatedUser.lists
     };
 
-    final http.Response addNewList = await http.put(
+    http.put(
         'https://lean-list.firebaseio.com/users/' +
             _authenticatedUser.firebaseId +
             '.json',
         body: jsonEncode(updatedUser));
+  }
+
+  void selectAListCode(String code) {
+    _selectedListCode = code;
+  }
+
+  Future<bool> setUserLists() {
+    print('calling set user list');
+    _authenticatedUser.lists.forEach((listId) async {
+      final myResp = await http
+          .get('https://lean-list.firebaseio.com/lists/' + listId + '.json');
+      final Map<String, dynamic> returnedData = jsonDecode(myResp.body);
+      if (returnedData != null) {
+        final ListModel myAddition = new ListModel(
+            id: returnedData['id'],
+            title: returnedData['title'],
+            toggleDelete: returnedData['toggleDelete'],
+            creator: returnedData['creator'],
+            fullPermissions: returnedData['fullPermissions'],
+            icon: returnedData['icon'],
+            shareId: returnedData['shareId'],
+            items: returnedData['items']);
+        print('adding to list');
+        _userLists.add(myAddition);
+      }
+    });
+    return Future(() {
+      print('calling end future');
+      return true;
+    });
+  }
+
+  void removeAList(String incShareId) {
+    _userLists.removeWhere((item) => item.shareId == incShareId);
+    _authenticatedUser.lists.removeWhere((item) => item.shareId == incShareId);
+    updateUserInDB();
   }
 
   Future<Map<String, dynamic>> signIn(String email, String password) async {
@@ -116,7 +139,9 @@ mixin GetListInformation on ConnectedLists {
           );
         }
       });
-      setUserLists();
+      print('before set user list');
+      await setUserLists();
+      print('after set user list');
       return {'success': true};
     }
   }
@@ -164,8 +189,9 @@ mixin GetListInformation on ConnectedLists {
           email: email,
           lists: [],
         );
-        setUserLists();
-        return {'success': true};
+        return {
+          'success': true,
+        };
       }
     }
   }
