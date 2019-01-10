@@ -8,7 +8,6 @@ import '../local_keys.dart';
 
 import '../models/list_model.dart';
 import '../models/user.dart';
-import '../resources/dummyData.dart';
 
 mixin ConnectedLists on Model {
   List<ListModel> _userLists = [];
@@ -45,34 +44,65 @@ mixin GetListInformation on ConnectedLists {
       'items': [],
       'toggleDelete': false
     };
+    _userLists.add(incomingListAddition);
     http
         .post('https://lean-list.firebaseio.com/lists.json',
             body: json.encode(myAddData))
-        .then((_) {
-      _userLists.add(incomingListAddition);
+        .then((response) {
+      final Map<String, dynamic> returnedData = jsonDecode(response.body);
+      _authenticatedUser.lists.add(returnedData['name']);
+      updateUserInDB();
     });
+  }
+
+  void updateUserInDB() {
+    final Map<String, dynamic> updatedUser = {
+      'email': _authenticatedUser.email,
+      'username': _authenticatedUser.username,
+      'lists': _authenticatedUser.lists
+    };
+
+    http.put(
+        'https://lean-list.firebaseio.com/users/' +
+            _authenticatedUser.firebaseId +
+            '.json',
+        body: jsonEncode(updatedUser));
   }
 
   void selectAListCode(String code) {
     _selectedListCode = code;
   }
 
-  void setUserLists() {
-    _authenticatedUser.lists.forEach((listId) {
-      _userLists
-          .add(ourList[ourList.indexWhere((item) => item.shareId == listId)]);
+  Future<bool> setUserLists() {
+    print('calling set user list');
+    _authenticatedUser.lists.forEach((listId) async {
+      final myResp = await http
+          .get('https://lean-list.firebaseio.com/lists/' + listId + '.json');
+      final Map<String, dynamic> returnedData = jsonDecode(myResp.body);
+      if (returnedData != null) {
+        final ListModel myAddition = new ListModel(
+            id: returnedData['id'],
+            title: returnedData['title'],
+            toggleDelete: returnedData['toggleDelete'],
+            creator: returnedData['creator'],
+            fullPermissions: returnedData['fullPermissions'],
+            icon: returnedData['icon'],
+            shareId: returnedData['shareId'],
+            items: returnedData['items']);
+        print('adding to list');
+        _userLists.add(myAddition);
+      }
+    });
+    return Future(() {
+      print('calling end future');
+      return true;
     });
   }
 
   void removeAList(String incShareId) {
     _userLists.removeWhere((item) => item.shareId == incShareId);
-  }
-
-  void addANewList(String code) async {
-    _authenticatedUser.lists.add(code);
-    //push new item to list in the DB
-    final http.Response addNewList =
-        await http.post('https://lean-list.firebaseio.com/users.json');
+    _authenticatedUser.lists.removeWhere((item) => item.shareId == incShareId);
+    updateUserInDB();
   }
 
   Future<Map<String, dynamic>> signIn(String email, String password) async {
@@ -102,16 +132,16 @@ mixin GetListInformation on ConnectedLists {
       allUsers.forEach((String id, dynamic listData) {
         if (email == listData['email']) {
           _authenticatedUser = new UserModel(
-            firebaseId: listData['localId'],
+            firebaseId: id,
             username: listData['username'],
             email: listData['email'],
             lists: listData['lists'] == null ? [] : listData['lists'],
           );
-        } else {
-          print('Something went terribly wrong with the DB');
         }
       });
-      setUserLists();
+      print('before set user list');
+      await setUserLists();
+      print('after set user list');
       return {'success': true};
     }
   }
@@ -154,13 +184,14 @@ mixin GetListInformation on ConnectedLists {
         };
       } else {
         _authenticatedUser = new UserModel(
-          firebaseId: theResponseDecoded['localId'],
+          firebaseId: secondResponseDecoded['name'],
           username: username,
           email: email,
           lists: [],
         );
-        setUserLists();
-        return {'success': true};
+        return {
+          'success': true,
+        };
       }
     }
   }
