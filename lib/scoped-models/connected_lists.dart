@@ -45,12 +45,11 @@ mixin GetListInformation on ConnectedLists {
       'items': [],
       'toggleDelete': false
     };
+    _userLists.add(incomingListAddition);
     http
         .post('https://lean-list.firebaseio.com/lists.json',
             body: json.encode(myAddData))
-        .then((_) {
-      _userLists.add(incomingListAddition);
-    });
+        .then((_) {});
   }
 
   void selectAListCode(String code) {
@@ -70,9 +69,17 @@ mixin GetListInformation on ConnectedLists {
 
   void addANewList(String code) async {
     _authenticatedUser.lists.add(code);
-    //push new item to list in the DB
-    final http.Response addNewList =
-        await http.post('https://lean-list.firebaseio.com/users.json');
+    final Map<String, dynamic> updatedUser = {
+      'email': _authenticatedUser.email,
+      'username': _authenticatedUser.username,
+      'lists': _authenticatedUser.lists
+    };
+
+    final http.Response addNewList = await http.put(
+        'https://lean-list.firebaseio.com/users/' +
+            _authenticatedUser.firebaseId +
+            '.json',
+        body: jsonEncode(updatedUser));
   }
 
   Future<Map<String, dynamic>> signIn(String email, String password) async {
@@ -102,13 +109,11 @@ mixin GetListInformation on ConnectedLists {
       allUsers.forEach((String id, dynamic listData) {
         if (email == listData['email']) {
           _authenticatedUser = new UserModel(
-            firebaseId: listData['localId'],
+            firebaseId: id,
             username: listData['username'],
             email: listData['email'],
             lists: listData['lists'] == null ? [] : listData['lists'],
           );
-        } else {
-          print('Something went terribly wrong with the DB');
         }
       });
       setUserLists();
@@ -154,7 +159,7 @@ mixin GetListInformation on ConnectedLists {
         };
       } else {
         _authenticatedUser = new UserModel(
-          firebaseId: theResponseDecoded['localId'],
+          firebaseId: secondResponseDecoded['name'],
           username: username,
           email: email,
           lists: [],
