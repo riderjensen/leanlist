@@ -228,7 +228,6 @@ class _CreateNewList extends State<CreateNewList> {
               toggleDelete: false,
               items: {'incomplete': [], 'complete': []},
             );
-            widget._listModel.addANewList(newID.split('-')[0]);
             widget._listModel.addToUserLists(newestAddition);
             // await putting into db
             Navigator.of(context).pop();
