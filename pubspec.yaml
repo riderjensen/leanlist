@@ -20,7 +20,6 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.2
   flutter_fab_dialer: ^0.1.1
-  uuid: ^1.0.3
   scoped_model: ^1.0.1
   http: ^0.12.0
 

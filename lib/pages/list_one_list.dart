@@ -19,7 +19,7 @@ class ListOneList extends StatefulWidget {
 class _ListOneList extends State<ListOneList> {
   static GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  Future<void> _createShareAlert(BuildContext context, String shareId) async {
+  Future<void> _createShareAlert(BuildContext context, String firbaseId) async {
     return showDialog<void>(
       context: context,
       barrierDismissible: true,
@@ -29,7 +29,7 @@ class _ListOneList extends State<ListOneList> {
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
-                Text(shareId),
+                Text(firbaseId),
               ],
             ),
           ),
@@ -116,7 +116,7 @@ class _ListOneList extends State<ListOneList> {
             IconButton(
               icon: Icon(Icons.share),
               onPressed: () {
-                _createShareAlert(context, ourItem.shareId);
+                _createShareAlert(context, ourItem.firebaseId);
               },
             ),
             IconButton(

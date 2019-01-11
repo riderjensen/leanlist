@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import '../scoped-models/main_model.dart';
 
 class AddListDialog extends StatelessWidget {
   final Map<String, String> _formData = {'code': null};
   static GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final MainModel myModel;
+
+  AddListDialog(this.myModel);
 
   @override
   Widget build(BuildContext context) {
@@ -43,13 +47,19 @@ class AddListDialog extends StatelessWidget {
         FlatButton(
           child: Text('Add'),
           onPressed: () {
-            // await finding the list and adding them to it
             _formKey.currentState.save();
             if (!_formKey.currentState.validate()) {
               return;
             }
-            // this push isnt working, need to basically refresh the home page
-            Navigator.of(context).pop();
+            if (myModel.authUser.lists.contains(_formData['code'])) {
+              return;
+            } else {
+              myModel.authUser.lists.add(_formData['code']);
+              myModel.updateUserInDB();
+              myModel.setUserLists();
+              // this push isnt working, need to basically refresh the home page
+              Navigator.of(context).pop();
+            }
           },
         ),
       ],

@@ -16,7 +16,7 @@ class MyHomePage extends StatelessWidget {
         title: Text('${_listModel.authUser.username}\'s Lists'),
       ),
       body: ListLists(_listModel),
-      floatingActionButton: HomeFab(),
+      floatingActionButton: HomeFab(_listModel),
     );
   }
 }
