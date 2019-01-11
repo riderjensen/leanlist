@@ -2,8 +2,13 @@ import 'package:flutter_fab_dialer/flutter_fab_dialer.dart';
 import 'package:flutter/material.dart';
 
 import '../form_elements/add_list_dialog.dart';
+import '../scoped-models/main_model.dart';
 
 class HomeFab extends StatefulWidget {
+  final MainModel myModel;
+
+  HomeFab(this.myModel);
+
   @override
   State<StatefulWidget> createState() {
     return _HomeFab();
@@ -16,7 +21,7 @@ class _HomeFab extends State<HomeFab> with TickerProviderStateMixin {
       context: context,
       barrierDismissible: false,
       builder: (BuildContext context) {
-        return AddListDialog();
+        return AddListDialog(widget.myModel);
       },
     );
   }
