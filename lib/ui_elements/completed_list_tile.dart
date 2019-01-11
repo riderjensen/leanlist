@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 
 class CompletedListTile extends StatefulWidget {
-  final Map<String, List<Object>> ourList;
+  final Map<String, dynamic> ourList;
+  final Function updateListInDB;
 
-  CompletedListTile(this.ourList);
+  CompletedListTile(this.ourList, this.updateListInDB);
   @override
   State<StatefulWidget> createState() {
     return _CompletedListTile();
@@ -38,7 +39,7 @@ class _CompletedListTile extends State<CompletedListTile> {
                       setState(() {
                         items.removeAt(int);
                       });
-                      // update db
+                      widget.updateListInDB();
                     }
                   },
                   background: Container(
@@ -59,7 +60,7 @@ class _CompletedListTile extends State<CompletedListTile> {
                             setState(() {
                               items.removeAt(int);
                             });
-                            // update the DB with the corrected information
+                            widget.updateListInDB();
                           }),
                       Divider(),
                     ],

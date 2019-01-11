@@ -143,9 +143,12 @@ class _ListOneList extends State<ListOneList> {
         ),
         body: TabBarView(
           children: <Widget>[
-            IncompleteListTile(widget.listModel.getOneList.items,
-                widget.listModel.authUser.username),
-            CompletedListTile(widget.listModel.getOneList.items),
+            IncompleteListTile(
+                widget.listModel.getOneList.items,
+                widget.listModel.authUser.username,
+                widget.listModel.updateListInDB),
+            CompletedListTile(widget.listModel.getOneList.items,
+                widget.listModel.updateListInDB)
           ],
         ),
       ),

@@ -29,7 +29,8 @@ class _MainListCard extends State<MainListCard> {
             title: Text(ourList[int].title),
             subtitle: Text('Creator: ${ourList[int].creator}'),
             onTap: () {
-              Navigator.pushNamed<dynamic>(context, '/list/' + ourList[int].id);
+              Navigator.pushNamed<dynamic>(
+                  context, '/list/' + ourList[int].shareId);
             }),
       ],
     );
@@ -47,7 +48,7 @@ class _MainListCard extends State<MainListCard> {
               icon: Icon(Icons.delete),
               onPressed: () {
                 setState(() {
-                  widget.theMainModel.removeAList(ourList[int].shareId);
+                  widget.theMainModel.removeAList(ourList[int].firebaseId);
                 });
               },
             ),

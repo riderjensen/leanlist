@@ -8,7 +8,7 @@ class ListModel {
   final String creator;
   final bool fullPermissions;
   bool toggleDelete;
-  Map<String, List> items;
+  Map<String, dynamic> items;
   String firebaseId;
 
   ListModel(

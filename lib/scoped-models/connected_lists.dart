@@ -29,13 +29,18 @@ mixin GetListInformation on ConnectedLists {
   }
 
   ListModel get getOneList {
+    if (_userLists.isEmpty) {
+      print('user list is null');
+      return null;
+    }
+    print(_selectedListCode);
     final ListModel myReturnModel = _userLists[
-        _userLists.indexWhere((item) => item.id == _selectedListCode)];
+        _userLists.indexWhere((item) => item.shareId == _selectedListCode)];
 
     if (myReturnModel.items == null) {
       myReturnModel.setItems({'incomplete': [], 'complete': []});
     }
-    print('returning get one list with ${myReturnModel.id}');
+    print('returning get one list with ${myReturnModel.firebaseId}');
     return myReturnModel;
   }
 
@@ -56,11 +61,11 @@ mixin GetListInformation on ConnectedLists {
             body: json.encode(myAddData))
         .then((response) {
       final Map<String, dynamic> returnedData = jsonDecode(response.body);
-      myAddData['firebaseId'] = returnedData['name'];
+      incomingListAddition.firebaseId = returnedData['name'];
       _userLists.add(incomingListAddition);
       _authenticatedUser.lists.add(returnedData['name']);
-      updateListInDB();
       updateUserInDB();
+      updateListInDB();
     });
   }
 
@@ -80,8 +85,6 @@ mixin GetListInformation on ConnectedLists {
 
   void updateListInDB() {
     final ListModel myList = getOneList;
-    // cant put to list beacuse firebaseID keeps being null
-    print(myList.firebaseId);
 
     final Map<String, dynamic> outgoingList = {
       'id': myList.id,
@@ -94,8 +97,7 @@ mixin GetListInformation on ConnectedLists {
       'toggleDelete': myList.toggleDelete,
       'firebaseId': myList.firebaseId
     };
-    print('maybeupdate');
-    print(outgoingList['firebaseId']);
+    print('--update called--');
     http.put(
         'https://lean-list.firebaseio.com/lists/' +
             outgoingList['firebaseId'] +
@@ -104,8 +106,6 @@ mixin GetListInformation on ConnectedLists {
   }
 
   void selectAListCode(String code) {
-    print('setting list code');
-    print(code);
     _selectedListCode = code;
   }
 
@@ -124,6 +124,7 @@ mixin GetListInformation on ConnectedLists {
             fullPermissions: returnedData['fullPermissions'],
             icon: returnedData['icon'],
             shareId: returnedData['shareId'],
+            firebaseId: returnedData['firebaseId'],
             items: returnedData['items']);
         print('adding to list');
         _userLists.add(myAddition);
@@ -135,9 +136,12 @@ mixin GetListInformation on ConnectedLists {
     });
   }
 
-  void removeAList(String incShareId) {
-    _userLists.removeWhere((item) => item.shareId == incShareId);
-    _authenticatedUser.lists.removeWhere((item) => item.shareId == incShareId);
+  void removeAList(String firebaseId) {
+    _userLists.removeWhere((item) => item.firebaseId == firebaseId);
+    _authenticatedUser.lists
+        .removeWhere((item) => item.firebaseId == firebaseId);
+    http.delete(
+        'https://lean-list.firebaseio.com/lists/' + firebaseId + '.json');
     updateUserInDB();
   }
 
@@ -175,9 +179,7 @@ mixin GetListInformation on ConnectedLists {
           );
         }
       });
-      print('before set user list');
-      await setUserLists();
-      print('after set user list');
+      setUserLists();
       return {'success': true};
     }
   }

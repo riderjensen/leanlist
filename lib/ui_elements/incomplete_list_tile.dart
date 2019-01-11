@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 
 class IncompleteListTile extends StatefulWidget {
-  final Map<String, List<Object>> ourList;
+  final Map<String, dynamic> ourList;
   final String username;
+  final Function updateListInDB;
 
-  IncompleteListTile(this.ourList, this.username);
+  IncompleteListTile(this.ourList, this.username, this.updateListInDB);
 
   @override
   State<StatefulWidget> createState() {
@@ -40,7 +41,7 @@ class _IncompleteListTile extends State<IncompleteListTile> {
                       setState(() {
                         items.removeAt(int);
                       });
-                      // update db
+                      widget.updateListInDB();
                     }
                   },
                   background: Container(
@@ -63,7 +64,7 @@ class _IncompleteListTile extends State<IncompleteListTile> {
                             setState(() {
                               items.removeAt(int);
                             });
-                            // update the DB with the corrected information
+                            widget.updateListInDB();
                           }),
                       Divider(),
                     ],
