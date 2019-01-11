@@ -29,8 +29,13 @@ mixin GetListInformation on ConnectedLists {
   }
 
   ListModel get getOneList {
-    return _userLists[
-        _userLists.indexWhere((item) => item.shareId == _selectedListCode)];
+    final ListModel myReturnModel = _userLists[
+        _userLists.indexWhere((item) => item.id == _selectedListCode)];
+
+    if (myReturnModel.items == null) {
+      myReturnModel.setItems({'incomplete': [], 'complete': []});
+    }
+    return myReturnModel;
   }
 
   Future addToUserLists(ListModel incomingListAddition) async {
@@ -41,7 +46,7 @@ mixin GetListInformation on ConnectedLists {
       'icon': incomingListAddition.icon,
       'creator': incomingListAddition.creator,
       'fullPermissions': incomingListAddition.fullPermissions,
-      'items': [],
+      'items': {'incomplete': [], 'complete': []},
       'toggleDelete': false
     };
     _userLists.add(incomingListAddition);
