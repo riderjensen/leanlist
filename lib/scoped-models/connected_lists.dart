@@ -33,7 +33,6 @@ mixin GetListInformation on ConnectedLists {
       print('user list is null');
       return null;
     }
-    print(_selectedListCode);
     final ListModel myReturnModel = _userLists[
         _userLists.indexWhere((item) => item.shareId == _selectedListCode)];
 
