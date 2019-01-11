@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:uuid/uuid.dart';
 
 import '../resources/icon_list.dart';
 import '../models/list_model.dart';
@@ -216,11 +215,7 @@ class _CreateNewList extends State<CreateNewList> {
                 widget.formData['fullPermissions'] == null) {
               return;
             }
-            final Uuid uuid = new Uuid();
-            final String newID = uuid.v1();
             final ListModel newestAddition = new ListModel(
-              id: newID,
-              shareId: newID.split('-')[0],
               creator: widget._listModel.authUser.username,
               icon: widget.formData['icon'],
               title: widget.formData['title'],
