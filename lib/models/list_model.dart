@@ -8,16 +8,21 @@ class ListModel {
   final String creator;
   final bool fullPermissions;
   bool toggleDelete;
-  final Map<String, List> items;
+  Map<String, List> items;
+  String firebaseId;
 
-  ListModel({
-    @required this.id,
-    @required this.shareId,
-    @required this.title,
-    @required this.icon,
-    @required this.creator,
-    @required this.fullPermissions,
-    @required this.toggleDelete,
-    @required this.items,
-  });
+  ListModel(
+      {@required this.id,
+      @required this.shareId,
+      @required this.title,
+      @required this.icon,
+      @required this.creator,
+      @required this.fullPermissions,
+      @required this.toggleDelete,
+      @required this.items,
+      this.firebaseId});
+
+  void setItems(Map<String, List> incomingSetter) {
+    this.items = incomingSetter;
+  }
 }

@@ -29,8 +29,7 @@ class _MainListCard extends State<MainListCard> {
             title: Text(ourList[int].title),
             subtitle: Text('Creator: ${ourList[int].creator}'),
             onTap: () {
-              Navigator.pushNamed<dynamic>(
-                  context, '/list/' + ourList[int].shareId);
+              Navigator.pushNamed<dynamic>(context, '/list/' + ourList[int].id);
             }),
       ],
     );
