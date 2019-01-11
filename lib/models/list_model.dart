@@ -8,7 +8,7 @@ class ListModel {
   final String creator;
   final bool fullPermissions;
   bool toggleDelete;
-  final Map<String, List> items;
+  Map<String, List> items;
 
   ListModel({
     @required this.id,
@@ -20,4 +20,8 @@ class ListModel {
     @required this.toggleDelete,
     @required this.items,
   });
+
+  void setItems(Map<String, List> incomingSetter) {
+    this.items = incomingSetter;
+  }
 }
