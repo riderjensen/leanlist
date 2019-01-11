@@ -35,6 +35,7 @@ mixin GetListInformation on ConnectedLists {
     if (myReturnModel.items == null) {
       myReturnModel.setItems({'incomplete': [], 'complete': []});
     }
+    print('returning get one list with ${myReturnModel.id}');
     return myReturnModel;
   }
 
@@ -47,15 +48,18 @@ mixin GetListInformation on ConnectedLists {
       'creator': incomingListAddition.creator,
       'fullPermissions': incomingListAddition.fullPermissions,
       'items': {'incomplete': [], 'complete': []},
-      'toggleDelete': false
+      'toggleDelete': false,
+      'firebaseId': null
     };
-    _userLists.add(incomingListAddition);
     http
         .post('https://lean-list.firebaseio.com/lists.json',
             body: json.encode(myAddData))
         .then((response) {
       final Map<String, dynamic> returnedData = jsonDecode(response.body);
+      myAddData['firebaseId'] = returnedData['name'];
+      _userLists.add(incomingListAddition);
       _authenticatedUser.lists.add(returnedData['name']);
+      updateListInDB();
       updateUserInDB();
     });
   }
@@ -74,7 +78,34 @@ mixin GetListInformation on ConnectedLists {
         body: jsonEncode(updatedUser));
   }
 
+  void updateListInDB() {
+    final ListModel myList = getOneList;
+    // cant put to list beacuse firebaseID keeps being null
+    print(myList.firebaseId);
+
+    final Map<String, dynamic> outgoingList = {
+      'id': myList.id,
+      'shareId': myList.shareId,
+      'title': myList.title,
+      'icon': myList.icon,
+      'creator': myList.creator,
+      'fullPermissions': myList.fullPermissions,
+      'items': myList.items,
+      'toggleDelete': myList.toggleDelete,
+      'firebaseId': myList.firebaseId
+    };
+    print('maybeupdate');
+    print(outgoingList['firebaseId']);
+    http.put(
+        'https://lean-list.firebaseio.com/lists/' +
+            outgoingList['firebaseId'] +
+            '.json',
+        body: jsonEncode(outgoingList));
+  }
+
   void selectAListCode(String code) {
+    print('setting list code');
+    print(code);
     _selectedListCode = code;
   }
 
