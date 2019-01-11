@@ -93,7 +93,7 @@ class _ListOneList extends State<ListOneList> {
                 setState(() {
                   incompleteList.add(widget._formData['item']);
                 });
-                // push item to the DB
+                widget.listModel.updateListInDB();
                 Navigator.of(context).pop();
               },
             ),
