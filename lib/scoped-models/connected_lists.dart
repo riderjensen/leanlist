@@ -34,7 +34,7 @@ mixin GetListInformation on ConnectedLists {
       return null;
     }
     final ListModel myReturnModel = _userLists[
-        _userLists.indexWhere((item) => item.shareId == _selectedListCode)];
+        _userLists.indexWhere((item) => item.firebaseId == _selectedListCode)];
 
     if (myReturnModel.items == null) {
       myReturnModel.setItems({'incomplete': [], 'complete': []});
@@ -45,8 +45,6 @@ mixin GetListInformation on ConnectedLists {
 
   Future addToUserLists(ListModel incomingListAddition) async {
     final Map<String, dynamic> myAddData = {
-      'id': incomingListAddition.id,
-      'shareId': incomingListAddition.shareId,
       'title': incomingListAddition.title,
       'icon': incomingListAddition.icon,
       'creator': incomingListAddition.creator,
@@ -86,8 +84,6 @@ mixin GetListInformation on ConnectedLists {
     final ListModel myList = getOneList;
 
     final Map<String, dynamic> outgoingList = {
-      'id': myList.id,
-      'shareId': myList.shareId,
       'title': myList.title,
       'icon': myList.icon,
       'creator': myList.creator,
@@ -116,13 +112,11 @@ mixin GetListInformation on ConnectedLists {
       final Map<String, dynamic> returnedData = jsonDecode(myResp.body);
       if (returnedData != null) {
         final ListModel myAddition = new ListModel(
-            id: returnedData['id'],
             title: returnedData['title'],
             toggleDelete: returnedData['toggleDelete'],
             creator: returnedData['creator'],
             fullPermissions: returnedData['fullPermissions'],
             icon: returnedData['icon'],
-            shareId: returnedData['shareId'],
             firebaseId: returnedData['firebaseId'],
             items: returnedData['items']);
         print('adding to list');
