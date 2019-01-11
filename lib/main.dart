@@ -57,8 +57,7 @@ class _MyAppState extends State<MyApp> {
             final String listId = pathElements[2];
             _listModel.selectAListCode(listId);
             return MaterialPageRoute<bool>(
-              builder: (BuildContext context) => ListOneList(
-                  _listModel.getOneList, _listModel.authUser.username),
+              builder: (BuildContext context) => ListOneList(_listModel),
             );
           }
           return null;
