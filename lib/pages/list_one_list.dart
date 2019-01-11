@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 import '../models/list_model.dart';
 import '../ui_elements/completed_list_tile.dart';
 import '../ui_elements/incomplete_list_tile.dart';
+import '../scoped-models/main_model.dart';
 
 class ListOneList extends StatefulWidget {
-  final ListModel oneList;
-  final String theUsername;
+  final MainModel listModel;
   final Map<String, String> _formData = {'item': null};
 
-  ListOneList(this.oneList, this.theUsername);
+  ListOneList(this.listModel);
   @override
   State<StatefulWidget> createState() {
     return _ListOneList();
@@ -105,8 +105,8 @@ class _ListOneList extends State<ListOneList> {
 
   @override
   Widget build(BuildContext context) {
-    ListModel ourItem = widget.oneList;
-
+    ListModel ourItem = widget.listModel.getOneList;
+    // items is null for whatever reason
     return DefaultTabController(
       length: 2,
       child: Scaffold(
@@ -143,8 +143,9 @@ class _ListOneList extends State<ListOneList> {
         ),
         body: TabBarView(
           children: <Widget>[
-            IncompleteListTile(ourItem.items, widget.theUsername),
-            CompletedListTile(ourItem.items),
+            IncompleteListTile(widget.listModel.getOneList.items,
+                widget.listModel.authUser.username),
+            CompletedListTile(widget.listModel.getOneList.items),
           ],
         ),
       ),
