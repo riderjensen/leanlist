@@ -39,7 +39,6 @@ mixin GetListInformation on ConnectedLists {
     if (myReturnModel.items == null) {
       myReturnModel.setItems({'incomplete': [], 'complete': []});
     }
-    print('returning get one list with ${myReturnModel.firebaseId}');
     return myReturnModel;
   }
 
@@ -61,12 +60,9 @@ mixin GetListInformation on ConnectedLists {
       incomingListAddition.firebaseId = returnedData['name'];
       _userLists.add(incomingListAddition);
       _authenticatedUser.lists.add(returnedData['name']);
-      notifyListeners();
-      updateListInDB().then((_) {
-        print('update the list in the db');
-        updateUserInDB().then((_) {
-          print('Update the user in the DB');
-        });
+      selectAListCode(returnedData['name']);
+      return updateUserInDB().then((_) {
+        return updateListInDB();
       });
     });
   }
@@ -114,26 +110,29 @@ mixin GetListInformation on ConnectedLists {
   }
 
   Future<void> setUserLists() async {
-    return _authenticatedUser.lists.forEach((listId) async {
-      return await http
-          .get('https://lean-list.firebaseio.com/lists/' + listId + '.json')
-          .then((myResp) {
-        final Map<String, dynamic> returnedData = jsonDecode(myResp.body);
-        if (returnedData != null) {
-          final ListModel myAddition = new ListModel(
-              title: returnedData['title'],
-              toggleDelete: returnedData['toggleDelete'],
-              creator: returnedData['creator'],
-              fullPermissions: returnedData['fullPermissions'],
-              icon: returnedData['icon'],
-              firebaseId: returnedData['firebaseId'],
-              items: returnedData['items']);
-          print('adding to list');
-          _userLists.add(myAddition);
-        } else {
-          print('We couldnt find this list in the DB');
-        }
-      });
+    List<Future> myFutures = [];
+    _authenticatedUser.lists.forEach((listId) {
+      myFutures.add(
+          http.get('https://lean-list.firebaseio.com/lists/${listId}.json'));
+    });
+
+    List returnedList = await Future.wait(myFutures);
+
+    returnedList.forEach((item) {
+      final Map<String, dynamic> returnedData = jsonDecode(item.body);
+      if (returnedData != null) {
+        final ListModel myAddition = new ListModel(
+            title: returnedData['title'],
+            toggleDelete: returnedData['toggleDelete'],
+            creator: returnedData['creator'],
+            fullPermissions: returnedData['fullPermissions'],
+            icon: returnedData['icon'],
+            firebaseId: returnedData['firebaseId'],
+            items: returnedData['items']);
+        _userLists.add(myAddition);
+      } else {
+        print('We couldnt find this list in the DB');
+      }
     });
   }
 
@@ -156,8 +155,6 @@ mixin GetListInformation on ConnectedLists {
       body: jsonEncode(authData),
       headers: {'Content-Type': 'application/json'},
     ).then((userResponse) {
-      print('just getting login information back');
-
       final Map<String, dynamic> theUserResponseDecoded =
           jsonDecode(userResponse.body);
 
