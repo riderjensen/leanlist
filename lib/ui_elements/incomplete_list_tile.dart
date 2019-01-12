@@ -17,7 +17,7 @@ class _IncompleteListTile extends State<IncompleteListTile> {
   @override
   Widget build(BuildContext context) {
     final List<Object> items = widget.ourList['incomplete'];
-    return items.isEmpty
+    return items == null || items.isEmpty
         ? Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,

@@ -66,6 +66,10 @@ mixin GetListInformation on ConnectedLists {
     });
   }
 
+  void clearCurrentLists() {
+    _authenticatedUser.lists.removeRange(0, _authenticatedUser.lists.length);
+  }
+
   void updateUserInDB() {
     final Map<String, dynamic> updatedUser = {
       'email': _authenticatedUser.email,
@@ -121,6 +125,8 @@ mixin GetListInformation on ConnectedLists {
             items: returnedData['items']);
         print('adding to list');
         _userLists.add(myAddition);
+      } else {
+        print('We couldnt find this list in the DB');
       }
     });
     return Future(() {
@@ -131,10 +137,9 @@ mixin GetListInformation on ConnectedLists {
 
   void removeAList(String firebaseId) {
     _userLists.removeWhere((item) => item.firebaseId == firebaseId);
-    _authenticatedUser.lists
-        .removeWhere((item) => item.firebaseId == firebaseId);
-    http.delete(
-        'https://lean-list.firebaseio.com/lists/' + firebaseId + '.json');
+    _authenticatedUser.lists.removeWhere((item) => item == firebaseId);
+    // http.delete(
+    //     'https://lean-list.firebaseio.com/lists/' + firebaseId + '.json');
     updateUserInDB();
   }
 

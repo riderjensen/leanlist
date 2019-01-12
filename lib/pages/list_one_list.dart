@@ -105,29 +105,35 @@ class _ListOneList extends State<ListOneList> {
   @override
   Widget build(BuildContext context) {
     ListModel ourItem = widget.listModel.getOneList;
+    final String authUsername = widget.listModel.authUser.username;
     final key = new GlobalKey<ScaffoldState>();
+
     return DefaultTabController(
       length: 2,
       child: Scaffold(
         key: key,
         appBar: AppBar(
           title: Text(ourItem.title),
-          actions: <Widget>[
-            IconButton(
-              icon: Icon(Icons.share),
-              onPressed: () {
-                _createShareAlert(context, ourItem.firebaseId, key);
-              },
-            ),
-            IconButton(
-              icon: Icon(Icons.add),
-              onPressed: () {
-                setState(() {
-                  _createAddItemDialog(context, ourItem.items['incomplete']);
-                });
-              },
-            ),
-          ],
+          actions: ourItem.fullPermissions == false &&
+                  ourItem.creator != authUsername
+              ? null
+              : <Widget>[
+                  IconButton(
+                    icon: Icon(Icons.share),
+                    onPressed: () {
+                      _createShareAlert(context, ourItem.firebaseId, key);
+                    },
+                  ),
+                  IconButton(
+                    icon: Icon(Icons.add),
+                    onPressed: () {
+                      setState(() {
+                        _createAddItemDialog(
+                            context, ourItem.items['incomplete']);
+                      });
+                    },
+                  ),
+                ],
           bottom: TabBar(
             tabs: <Widget>[
               Tab(
