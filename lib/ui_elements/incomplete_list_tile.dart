@@ -25,7 +25,7 @@ class _IncompleteListTile extends State<IncompleteListTile> {
               Container(
                 padding: EdgeInsets.all(20.0),
                 child: Text(
-                    'You have no items here. Use the button below to add some'),
+                    'You have no items here. Use the button above to add some'),
               )
             ],
           )
