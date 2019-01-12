@@ -139,16 +139,21 @@ class _AuthPage extends State<AuthPage> {
                         if (!_formKey.currentState.validate()) {
                           return;
                         }
-                        final Map<String, dynamic> information =
-                            await widget.listModel.signIn(
+                        return await widget.listModel
+                            .signIn(
                           _formData['email'],
                           _formData['password'],
-                        );
-                        if (information['success'] == true) {
-                          Navigator.of(context).pushReplacementNamed('/lists');
-                        } else {
-                          _alertSignInIssue(context, information['message']);
-                        }
+                        )
+                            .then((information) {
+                          print('auth page got called');
+
+                          if (information['success'] == true) {
+                            Navigator.of(context)
+                                .pushReplacementNamed('/lists');
+                          } else {
+                            _alertSignInIssue(context, information['message']);
+                          }
+                        });
                       },
                     )
                   ],
