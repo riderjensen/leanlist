@@ -43,7 +43,7 @@ mixin GetListInformation on ConnectedLists {
     return myReturnModel;
   }
 
-  Future addToUserLists(ListModel incomingListAddition) async {
+  Future<void> addToUserLists(ListModel incomingListAddition) async {
     final Map<String, dynamic> myAddData = {
       'title': incomingListAddition.title,
       'icon': incomingListAddition.icon,
@@ -53,7 +53,7 @@ mixin GetListInformation on ConnectedLists {
       'toggleDelete': false,
       'firebaseId': null
     };
-    http
+    return await http
         .post('https://lean-list.firebaseio.com/lists.json',
             body: json.encode(myAddData))
         .then((response) {
@@ -61,30 +61,35 @@ mixin GetListInformation on ConnectedLists {
       incomingListAddition.firebaseId = returnedData['name'];
       _userLists.add(incomingListAddition);
       _authenticatedUser.lists.add(returnedData['name']);
-      updateUserInDB();
-      updateListInDB();
+      notifyListeners();
+      updateListInDB().then((_) {
+        print('update the list in the db');
+        updateUserInDB().then((_) {
+          print('Update the user in the DB');
+        });
+      });
     });
   }
 
   void clearCurrentLists() {
-    _authenticatedUser.lists.removeRange(0, _authenticatedUser.lists.length);
+    _authenticatedUser.lists.clear();
   }
 
-  void updateUserInDB() {
+  Future<void> updateUserInDB() async {
     final Map<String, dynamic> updatedUser = {
       'email': _authenticatedUser.email,
       'username': _authenticatedUser.username,
       'lists': _authenticatedUser.lists
     };
 
-    http.put(
+    return await http.put(
         'https://lean-list.firebaseio.com/users/' +
             _authenticatedUser.firebaseId +
             '.json',
         body: jsonEncode(updatedUser));
   }
 
-  void updateListInDB() {
+  Future<void> updateListInDB() async {
     final ListModel myList = getOneList;
 
     final Map<String, dynamic> outgoingList = {
@@ -97,7 +102,7 @@ mixin GetListInformation on ConnectedLists {
       'firebaseId': myList.firebaseId
     };
     print('--update called--');
-    http.put(
+    return await http.put(
         'https://lean-list.firebaseio.com/lists/' +
             outgoingList['firebaseId'] +
             '.json',
@@ -108,30 +113,27 @@ mixin GetListInformation on ConnectedLists {
     _selectedListCode = code;
   }
 
-  Future<bool> setUserLists() {
-    print('calling set user list');
-    _authenticatedUser.lists.forEach((listId) async {
-      final myResp = await http
-          .get('https://lean-list.firebaseio.com/lists/' + listId + '.json');
-      final Map<String, dynamic> returnedData = jsonDecode(myResp.body);
-      if (returnedData != null) {
-        final ListModel myAddition = new ListModel(
-            title: returnedData['title'],
-            toggleDelete: returnedData['toggleDelete'],
-            creator: returnedData['creator'],
-            fullPermissions: returnedData['fullPermissions'],
-            icon: returnedData['icon'],
-            firebaseId: returnedData['firebaseId'],
-            items: returnedData['items']);
-        print('adding to list');
-        _userLists.add(myAddition);
-      } else {
-        print('We couldnt find this list in the DB');
-      }
-    });
-    return Future(() {
-      print('calling end future');
-      return true;
+  Future<void> setUserLists() async {
+    return _authenticatedUser.lists.forEach((listId) async {
+      return await http
+          .get('https://lean-list.firebaseio.com/lists/' + listId + '.json')
+          .then((myResp) {
+        final Map<String, dynamic> returnedData = jsonDecode(myResp.body);
+        if (returnedData != null) {
+          final ListModel myAddition = new ListModel(
+              title: returnedData['title'],
+              toggleDelete: returnedData['toggleDelete'],
+              creator: returnedData['creator'],
+              fullPermissions: returnedData['fullPermissions'],
+              icon: returnedData['icon'],
+              firebaseId: returnedData['firebaseId'],
+              items: returnedData['items']);
+          print('adding to list');
+          _userLists.add(myAddition);
+        } else {
+          print('We couldnt find this list in the DB');
+        }
+      });
     });
   }
 
@@ -143,43 +145,49 @@ mixin GetListInformation on ConnectedLists {
     updateUserInDB();
   }
 
-  Future<Map<String, dynamic>> signIn(String email, String password) async {
+  Future<Map<String, dynamic>> signIn(String email, String password) {
     final Map<String, dynamic> authData = {
       'email': email,
       'password': password,
       'returnSecureToken': true
     };
-    final http.Response userResponse = await http.post(
+    return http.post(
       'https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=${firebaseKey}',
       body: jsonEncode(authData),
       headers: {'Content-Type': 'application/json'},
-    );
-    final Map<String, dynamic> theUserResponseDecoded =
-        jsonDecode(userResponse.body);
+    ).then((userResponse) {
+      print('just getting login information back');
 
-    if (theUserResponseDecoded.containsKey('error')) {
-      return {
-        'success': false,
-        'message': theUserResponseDecoded['error']['message']
-      };
-    } else {
-      final http.Response fullUsersResponse =
-          await http.get('https://lean-list.firebaseio.com/users.json');
+      final Map<String, dynamic> theUserResponseDecoded =
+          jsonDecode(userResponse.body);
 
-      final Map<String, dynamic> allUsers = json.decode(fullUsersResponse.body);
-      allUsers.forEach((String id, dynamic listData) {
-        if (email == listData['email']) {
-          _authenticatedUser = new UserModel(
-            firebaseId: id,
-            username: listData['username'],
-            email: listData['email'],
-            lists: listData['lists'] == null ? [] : listData['lists'],
-          );
-        }
-      });
-      setUserLists();
-      return {'success': true};
-    }
+      if (theUserResponseDecoded.containsKey('error')) {
+        return {
+          'success': false,
+          'message': theUserResponseDecoded['error']['message']
+        };
+      } else {
+        return http
+            .get('https://lean-list.firebaseio.com/users.json')
+            .then((fullUsersResponse) {
+          final Map<String, dynamic> allUsers =
+              json.decode(fullUsersResponse.body);
+          allUsers.forEach((String id, dynamic listData) {
+            if (email == listData['email']) {
+              _authenticatedUser = new UserModel(
+                firebaseId: id,
+                username: listData['username'],
+                email: listData['email'],
+                lists: listData['lists'] == null ? [] : listData['lists'],
+              );
+            }
+          });
+          return setUserLists().then((_) {
+            return {'success': true};
+          });
+        });
+      }
+    });
   }
 
   Future<Map<String, dynamic>> signUp(
