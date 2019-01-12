@@ -7,11 +7,6 @@ import '../scoped-models/main_model.dart';
 class CreateNewList extends StatefulWidget {
   final MainModel _listModel;
 
-  final Map<String, dynamic> formData = {
-    'fullPermissions': true,
-    'icon': 0xe192,
-  };
-
   CreateNewList(this._listModel);
 
   @override
@@ -26,8 +21,18 @@ void _resetColor() {
   }
 }
 
-class _CreateNewList extends State<CreateNewList> {
+class _CreateNewList extends State<CreateNewList>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
+
+  Map<String, dynamic> formData = {
+    'fullPermissions': true,
+    'icon': 0xe192,
+  };
+
   static GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
+  bool firstPage = true;
 
   @override
   void initState() {
@@ -39,50 +44,10 @@ class _CreateNewList extends State<CreateNewList> {
     return Text(wording);
   }
 
-  Widget _returnIconChooseArea(BuildContext context) {
+  Widget _returnIconArea(BuildContext context) {
     return Column(
-      mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        _returnText('Enter a title'),
-        TextFormField(
-          onSaved: (String value) {
-            widget.formData['title'] = value;
-          },
-          validator: (String value) {
-            if (value.isEmpty) {
-              return 'A title is required';
-            }
-          },
-        ),
-        SizedBox(
-          height: 10,
-        ),
-        _returnText('Choose list permissions'),
-        Container(
-          child: SwitchListTile(
-            value: widget.formData['fullPermissions'],
-            onChanged: (bool value) {
-              setState(() {
-                widget.formData['fullPermissions'] = value;
-              });
-            },
-            title: widget.formData['fullPermissions']
-                ? Text('Full permissions')
-                : Text('Limited Permissions'),
-          ),
-        ),
-        Container(
-          child: widget.formData['fullPermissions']
-              ? Text('Anyone can edit, delete, and invite people to this list')
-              : Text(
-                  'Permissions are limited to the creator of the list. Users can still be invited and complete tasks.'),
-        ),
-        SizedBox(
-          height: 10,
-        ),
-        _returnText('Choose an icon'),
-        Flexible(
-          fit: FlexFit.loose,
+        new Expanded(
           child: ListView.builder(
             itemCount: icons.length,
             itemBuilder: (context, int) {
@@ -92,7 +57,7 @@ class _CreateNewList extends State<CreateNewList> {
                   IconButton(
                     onPressed: () {
                       setState(() {
-                        widget.formData['icon'] = icons[int][0]['icon'];
+                        formData['icon'] = icons[int][0]['icon'];
                         _resetColor();
                         icons[int][0]['color'] = [100, 181, 246];
                       });
@@ -110,7 +75,7 @@ class _CreateNewList extends State<CreateNewList> {
                   IconButton(
                     onPressed: () {
                       setState(() {
-                        widget.formData['icon'] = icons[int][1]['icon'];
+                        formData['icon'] = icons[int][1]['icon'];
                         _resetColor();
                         icons[int][1]['color'] = [100, 181, 246];
                       });
@@ -128,7 +93,7 @@ class _CreateNewList extends State<CreateNewList> {
                   IconButton(
                     onPressed: () {
                       setState(() {
-                        widget.formData['icon'] = icons[int][2]['icon'];
+                        formData['icon'] = icons[int][2]['icon'];
                         _resetColor();
                         icons[int][2]['color'] = [100, 181, 246];
                       });
@@ -146,7 +111,7 @@ class _CreateNewList extends State<CreateNewList> {
                   IconButton(
                     onPressed: () {
                       setState(() {
-                        widget.formData['icon'] = icons[int][3]['icon'];
+                        formData['icon'] = icons[int][3]['icon'];
                         _resetColor();
                         icons[int][3]['color'] = [100, 181, 246];
                       });
@@ -164,7 +129,7 @@ class _CreateNewList extends State<CreateNewList> {
                   IconButton(
                     onPressed: () {
                       setState(() {
-                        widget.formData['icon'] = icons[int][4]['icon'];
+                        formData['icon'] = icons[int][4]['icon'];
                         _resetColor();
                         icons[int][4]['color'] = [100, 181, 246];
                       });
@@ -182,7 +147,7 @@ class _CreateNewList extends State<CreateNewList> {
                   IconButton(
                     onPressed: () {
                       setState(() {
-                        widget.formData['icon'] = icons[int][5]['icon'];
+                        formData['icon'] = icons[int][5]['icon'];
                         _resetColor();
                         icons[int][5]['color'] = [100, 181, 246];
                       });
@@ -210,16 +175,11 @@ class _CreateNewList extends State<CreateNewList> {
           color: Colors.blue,
           child: Text('Create'),
           onPressed: () {
-            _formKey.currentState.save();
-            if (!_formKey.currentState.validate() ||
-                widget.formData['fullPermissions'] == null) {
-              return;
-            }
             final ListModel newestAddition = new ListModel(
               creator: widget._listModel.authUser.username,
-              icon: widget.formData['icon'],
-              title: widget.formData['title'],
-              fullPermissions: widget.formData['fullPermissions'],
+              icon: formData['icon'],
+              title: formData['title'],
+              fullPermissions: formData['fullPermissions'],
               toggleDelete: false,
               items: {'incomplete': [], 'complete': []},
             );
@@ -234,6 +194,69 @@ class _CreateNewList extends State<CreateNewList> {
     );
   }
 
+  Widget _returnIconChooseArea(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        _returnText('Enter a title'),
+        TextFormField(
+          onSaved: (String value) {
+            formData['title'] = value;
+          },
+          validator: (String value) {
+            if (value.isEmpty) {
+              return 'A title is required';
+            }
+          },
+        ),
+        SizedBox(
+          height: 10,
+        ),
+        _returnText('Choose list permissions'),
+        Container(
+          child: SwitchListTile(
+            value: formData['fullPermissions'],
+            onChanged: (bool value) {
+              setState(() {
+                formData['fullPermissions'] = value;
+              });
+            },
+            title: formData['fullPermissions']
+                ? Text('Full permissions')
+                : Text('Limited Permissions'),
+          ),
+        ),
+        Container(
+          child: formData['fullPermissions']
+              ? Text('Anyone can edit, delete, and invite people to this list')
+              : Text(
+                  'Permissions are limited to the creator of the list. Users can still be invited and complete tasks.'),
+        ),
+        SizedBox(
+          height: 10,
+        ),
+        RaisedButton(
+          textColor: Colors.white,
+          color: Colors.blue,
+          child: Text('Next'),
+          onPressed: () {
+            _formKey.currentState.save();
+            if (!_formKey.currentState.validate() ||
+                formData['fullPermissions'] == null) {
+              return;
+            }
+            setState(() {
+              firstPage = false;
+            });
+          },
+        ),
+        SizedBox(
+          height: 10,
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -242,7 +265,11 @@ class _CreateNewList extends State<CreateNewList> {
       ),
       body: Container(
         padding: EdgeInsets.all(20.0),
-        child: Form(key: _formKey, child: _returnIconChooseArea(context)),
+        child: Form(
+            key: _formKey,
+            child: firstPage == true
+                ? _returnIconChooseArea(context)
+                : _returnIconArea(context)),
       ),
     );
   }
