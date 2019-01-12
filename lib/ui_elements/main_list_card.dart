@@ -76,20 +76,19 @@ class _MainListCard extends State<MainListCard> {
     );
   }
 
-  Future<void> _refresh() {
-    return Future.delayed(
-        Duration(seconds: 1),
-        () =>
-            'Our future returning that will contact the db and get updated lists');
-  }
-
   @override
   Widget build(BuildContext context) {
-    final List<ListModel> ourList = widget.theMainModel.userLists;
-
+    List<dynamic> ourList = widget.theMainModel.userLists;
     return RefreshIndicator(
         key: _refreshIndicatorKey,
-        onRefresh: _refresh,
+        onRefresh: () {
+          widget.theMainModel.clearCurrentLists();
+          return widget.theMainModel.setUserLists().then((_) {
+            setState(() {
+              ourList = widget.theMainModel.userLists;
+            });
+          });
+        },
         child: ListView.builder(
           itemCount: ourList.length,
           itemBuilder: (context, int) {
