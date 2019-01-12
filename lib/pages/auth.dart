@@ -145,8 +145,6 @@ class _AuthPage extends State<AuthPage> {
                           _formData['password'],
                         )
                             .then((information) {
-                          print('auth page got called');
-
                           if (information['success'] == true) {
                             Navigator.of(context)
                                 .pushReplacementNamed('/lists');
