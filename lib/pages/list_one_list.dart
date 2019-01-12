@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../models/list_model.dart';
 import '../ui_elements/completed_list_tile.dart';
@@ -19,28 +20,26 @@ class ListOneList extends StatefulWidget {
 class _ListOneList extends State<ListOneList> {
   static GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  Future<void> _createShareAlert(BuildContext context, String firbaseId) async {
+  Future<void> _createShareAlert(
+      BuildContext context, String firbaseId, GlobalKey key) async {
     return showDialog<void>(
       context: context,
       barrierDismissible: true,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Your Share ID'),
+          title: Text('Tap for your Share ID'),
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
-                Text(firbaseId),
+                GestureDetector(
+                    child: Text(firbaseId),
+                    onTap: () {
+                      Clipboard.setData(new ClipboardData(text: firbaseId));
+                      Navigator.of(context).pop();
+                    })
               ],
             ),
           ),
-          actions: <Widget>[
-            FlatButton(
-              child: Text('Okay'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
         );
       },
     );
@@ -106,17 +105,18 @@ class _ListOneList extends State<ListOneList> {
   @override
   Widget build(BuildContext context) {
     ListModel ourItem = widget.listModel.getOneList;
-    // items is null for whatever reason
+    final key = new GlobalKey<ScaffoldState>();
     return DefaultTabController(
       length: 2,
       child: Scaffold(
+        key: key,
         appBar: AppBar(
           title: Text(ourItem.title),
           actions: <Widget>[
             IconButton(
               icon: Icon(Icons.share),
               onPressed: () {
-                _createShareAlert(context, ourItem.firebaseId);
+                _createShareAlert(context, ourItem.firebaseId, key);
               },
             ),
             IconButton(
