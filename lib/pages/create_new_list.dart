@@ -224,9 +224,10 @@ class _CreateNewList extends State<CreateNewList> {
               items: {'incomplete': [], 'complete': []},
             );
             widget._listModel.addToUserLists(newestAddition);
-            // await putting into db
-            Navigator.of(context).pop();
-            Navigator.of(context).pushReplacementNamed('/home');
+            widget._listModel.updateListInDB().then((onValue) {
+              Navigator.of(context).pop();
+              Navigator.of(context).pushReplacementNamed('/home');
+            });
           },
         )
       ],
