@@ -4,6 +4,8 @@ import 'package:flutter/services.dart';
 import '../models/list_model.dart';
 import '../ui_elements/completed_list_tile.dart';
 import '../ui_elements/incomplete_list_tile.dart';
+import '../ui_elements/no-swipe-completed_list_tile.dart';
+import '../ui_elements/no-swipe-incomplete_list_tile.dart';
 import '../scoped-models/main_model.dart';
 
 class ListOneList extends StatefulWidget {
@@ -148,14 +150,30 @@ class _ListOneList extends State<ListOneList> {
           ),
         ),
         body: TabBarView(
-          children: <Widget>[
-            IncompleteListTile(
-                widget.listModel.getOneList.items,
-                widget.listModel.authUser.username,
-                widget.listModel.updateListInDB),
-            CompletedListTile(widget.listModel.getOneList.items,
-                widget.listModel.updateListInDB)
-          ],
+          children: ourItem.fullPermissions == false &&
+                  ourItem.creator != authUsername
+              ? <Widget>[
+                  NoSwipeIncompleteListTile(
+                    widget.listModel.getOneList.items,
+                    widget.listModel.authUser.username,
+                    widget.listModel.updateListInDB,
+                  ),
+                  NoSwipeCompletedListTile(
+                    widget.listModel.getOneList.items,
+                    widget.listModel.updateListInDB,
+                  )
+                ]
+              : <Widget>[
+                  IncompleteListTile(
+                    widget.listModel.getOneList.items,
+                    widget.listModel.authUser.username,
+                    widget.listModel.updateListInDB,
+                  ),
+                  CompletedListTile(
+                    widget.listModel.getOneList.items,
+                    widget.listModel.updateListInDB,
+                  )
+                ],
         ),
       ),
     );
