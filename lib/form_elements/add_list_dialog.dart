@@ -57,9 +57,10 @@ class AddListDialog extends StatelessWidget {
               myModel.clearCurrentLists();
               myModel.authUser.lists.add(_formData['code']);
               myModel.setUserLists();
-              myModel.updateUserInDB();
-              // this push isnt working, need to basically refresh the home page
-              Navigator.of(context).pop();
+              myModel.updateUserInDB().then((_) {
+                Navigator.of(context).pop();
+                Navigator.of(context).pushReplacementNamed('/home');
+              });
             }
           },
         ),
