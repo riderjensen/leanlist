@@ -22,9 +22,15 @@ class _MyAppState extends State<MyApp> {
 
   @override
   void initState() {
-    if (_listModel.authUser != null) {
-      _listModel.setUserLists();
-    }
+    _listModel.autoAuthenticate().then((response) {
+      if (response == null) {
+        return;
+      }
+      if (_listModel.authUser != null) {
+        _listModel.setUserLists();
+      }
+    });
+
     super.initState();
   }
 
