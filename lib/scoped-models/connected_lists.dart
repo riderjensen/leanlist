@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:scoped_model/scoped_model.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../local_keys.dart';
 
@@ -177,6 +178,10 @@ mixin GetListInformation on ConnectedLists {
                 email: listData['email'],
                 lists: listData['lists'] == null ? [] : listData['lists'],
               );
+              SharedPreferences.getInstance().then((prefs) {
+                prefs.setString('userEmail', listData['email']);
+                prefs.setString('username', listData['username']);
+              });
             }
           });
           return setUserLists().then((_) {
@@ -185,6 +190,35 @@ mixin GetListInformation on ConnectedLists {
         });
       }
     });
+  }
+
+  Future<Map<String, bool>> autoAuthenticate() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final String userEmail = prefs.getString('userEmail');
+    final String username = prefs.getString('username');
+    if (userEmail != null && username != null) {
+      return http
+          .get('https://lean-list.firebaseio.com/users.json')
+          .then((fullUsersResponse) {
+        final Map<String, dynamic> allUsers =
+            json.decode(fullUsersResponse.body);
+        allUsers.forEach((String id, dynamic listData) {
+          if (userEmail == listData['email']) {
+            _authenticatedUser = new UserModel(
+              firebaseId: id,
+              username: listData['username'],
+              email: listData['email'],
+              lists: listData['lists'] == null ? [] : listData['lists'],
+            );
+          }
+        });
+        return setUserLists().then((_) {
+          return {'success': true};
+        });
+      });
+    } else {
+      return _authenticatedUser = null;
+    }
   }
 
   Future<Map<String, dynamic>> signUp(
@@ -224,6 +258,10 @@ mixin GetListInformation on ConnectedLists {
           'message': theResponseDecoded['error']['message']
         };
       } else {
+        SharedPreferences.getInstance().then((prefs) {
+          prefs.setString('userEmail', email);
+          prefs.setString('username', username);
+        });
         _authenticatedUser = new UserModel(
           firebaseId: secondResponseDecoded['name'],
           username: username,
