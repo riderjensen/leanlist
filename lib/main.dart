@@ -37,8 +37,9 @@ class _MyAppState extends State<MyApp> {
       child: MaterialApp(
         title: 'Lean List',
         theme: ThemeData(
-          primarySwatch: Colors.blue,
-        ),
+            primarySwatch: Colors.brown,
+            brightness: Brightness.light,
+            accentColor: Colors.green),
         home: _listModel.authUser == null
             ? AuthPage(_listModel)
             : MyHomePage(_listModel),
