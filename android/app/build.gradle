@@ -22,7 +22,7 @@ if (flutterVersionName == null) {
 }
 
 apply plugin: 'com.android.application'
-apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
+apply from: "C:/Users/rider/Documents/flutter/packages/flutter_tools/gradle/flutter.gradle"
 
 android {
     compileSdkVersion 27
@@ -33,9 +33,11 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId "com.example.leanlist"
+        applicationId "com.riderjensen.leanlist"
         minSdkVersion 16
         targetSdkVersion 27
+		versionCode 1
+        versionName "1.0.0"
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
