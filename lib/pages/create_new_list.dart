@@ -59,7 +59,7 @@ class _CreateNewList extends State<CreateNewList>
                       setState(() {
                         formData['icon'] = icons[int][0]['icon'];
                         _resetColor();
-                        icons[int][0]['color'] = [100, 181, 246];
+                        icons[int][0]['color'] = [121, 15, 72];
                       });
                     },
                     icon: Icon(
@@ -77,7 +77,7 @@ class _CreateNewList extends State<CreateNewList>
                       setState(() {
                         formData['icon'] = icons[int][1]['icon'];
                         _resetColor();
-                        icons[int][1]['color'] = [100, 181, 246];
+                        icons[int][1]['color'] = [121, 15, 72];
                       });
                     },
                     icon: Icon(
@@ -95,7 +95,7 @@ class _CreateNewList extends State<CreateNewList>
                       setState(() {
                         formData['icon'] = icons[int][2]['icon'];
                         _resetColor();
-                        icons[int][2]['color'] = [100, 181, 246];
+                        icons[int][2]['color'] = [121, 15, 72];
                       });
                     },
                     icon: Icon(
@@ -113,7 +113,7 @@ class _CreateNewList extends State<CreateNewList>
                       setState(() {
                         formData['icon'] = icons[int][3]['icon'];
                         _resetColor();
-                        icons[int][3]['color'] = [100, 181, 246];
+                        icons[int][3]['color'] = [121, 15, 72];
                       });
                     },
                     icon: Icon(
@@ -131,7 +131,7 @@ class _CreateNewList extends State<CreateNewList>
                       setState(() {
                         formData['icon'] = icons[int][4]['icon'];
                         _resetColor();
-                        icons[int][4]['color'] = [100, 181, 246];
+                        icons[int][4]['color'] = [121, 15, 72];
                       });
                     },
                     icon: Icon(
@@ -149,7 +149,7 @@ class _CreateNewList extends State<CreateNewList>
                       setState(() {
                         formData['icon'] = icons[int][5]['icon'];
                         _resetColor();
-                        icons[int][5]['color'] = [100, 181, 246];
+                        icons[int][5]['color'] = [121, 15, 72];
                       });
                     },
                     icon: Icon(
@@ -172,7 +172,7 @@ class _CreateNewList extends State<CreateNewList>
         ),
         RaisedButton(
           textColor: Colors.white,
-          color: Colors.blue,
+          color: Theme.of(context).primaryColor,
           child: Text('Create'),
           onPressed: () {
             final ListModel newestAddition = new ListModel(
@@ -237,7 +237,7 @@ class _CreateNewList extends State<CreateNewList>
         ),
         RaisedButton(
           textColor: Colors.white,
-          color: Colors.blue,
+          color: Theme.of(context).primaryColor,
           child: Text('Next'),
           onPressed: () {
             _formKey.currentState.save();

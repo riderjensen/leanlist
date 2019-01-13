@@ -35,22 +35,22 @@ class _HomeFab extends State<HomeFab> with TickerProviderStateMixin {
     final List<FabMiniMenuItem> _fabMiniMenuItemList = [
       new FabMiniMenuItem.withText(
           new Icon(Icons.add),
-          Colors.blue,
+          Theme.of(context).accentColor,
           4.0,
           "Button menu",
           _addNewListToAccount,
           "Enter an old code",
-          Colors.blue,
+          Theme.of(context).accentColor,
           Colors.white,
           true),
       new FabMiniMenuItem.withText(
           new Icon(Icons.add),
-          Colors.blue,
+          Theme.of(context).accentColor,
           4.0,
           "Button menu",
           _sendToCreatePage,
           "Create a new list",
-          Colors.blue,
+          Theme.of(context).accentColor,
           Colors.white,
           true),
     ];
@@ -60,7 +60,7 @@ class _HomeFab extends State<HomeFab> with TickerProviderStateMixin {
       children: [
         new FabDialer(
           _fabMiniMenuItemList,
-          Colors.blue,
+          Theme.of(context).accentColor,
           new Icon(Icons.add),
         ),
       ],
