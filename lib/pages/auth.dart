@@ -73,7 +73,7 @@ class _AuthPage extends State<AuthPage> {
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 25.0,
-                        color: Colors.blue,
+                        color: Theme.of(context).primaryColor,
                         letterSpacing: 2.0,
                       ),
                     ),
@@ -132,7 +132,7 @@ class _AuthPage extends State<AuthPage> {
                     ),
                     RaisedButton(
                       child: Text('Log In'),
-                      color: Colors.blue,
+                      color: Theme.of(context).primaryColor,
                       textColor: Colors.white,
                       onPressed: () async {
                         _formKey.currentState.save();
