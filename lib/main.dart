@@ -22,8 +22,6 @@ class _MyAppState extends State<MyApp> {
 
   @override
   void initState() {
-    //TODO
-    //Get user information that is stored on the phone and set the auth user
     if (_listModel.authUser != null) {
       _listModel.setUserLists();
     }
