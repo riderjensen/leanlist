@@ -1,4 +1,4 @@
-package com.example.leanlist;
+package com.riderjensen.leanlist;
 
 import android.os.Bundle;
 import io.flutter.app.FlutterActivity;
