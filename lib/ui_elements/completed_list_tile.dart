@@ -48,7 +48,8 @@ class _CompletedListTile extends State<CompletedListTile> {
                   child: Column(
                     children: <Widget>[
                       ListTile(
-                          leading: const Icon(Icons.check_box),
+                          leading: Icon(Icons.check_box,
+                              color: Theme.of(context).primaryColor),
                           title: Text(
                             items[int]['item'],
                           ),

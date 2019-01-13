@@ -77,7 +77,7 @@ class _SignUp extends State<SignUp> {
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 25.0,
-                        color: Colors.blue,
+                        color: Theme.of(context).primaryColor,
                         letterSpacing: 2.0,
                       ),
                     ),
@@ -157,7 +157,7 @@ class _SignUp extends State<SignUp> {
                     ),
                     RaisedButton(
                       child: Text('Sign Up'),
-                      color: Colors.blue,
+                      color: Theme.of(context).primaryColor,
                       textColor: Colors.white,
                       onPressed: () async {
                         _formKey.currentState.save();
