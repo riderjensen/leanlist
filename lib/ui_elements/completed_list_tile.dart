@@ -16,7 +16,7 @@ class _CompletedListTile extends State<CompletedListTile> {
   Widget build(BuildContext context) {
     final List<dynamic> items = widget.ourList['complete'];
 
-    return items.isEmpty
+    return items == null || items.isEmpty
         ? Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
