@@ -56,6 +56,9 @@ class _CompletedListTile extends State<CompletedListTile> {
                           subtitle: Text(
                               'Completed by: ${items[int]['userCom']} - ${items[int]['date']}'),
                           onTap: () {
+                            if(widget.ourList['incomplete'] == null){
+                              widget.ourList['incomplete'] = [];
+                            }
                             widget.ourList['incomplete']
                                 .add(items[int]['item']);
                             setState(() {
