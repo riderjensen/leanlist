@@ -183,10 +183,11 @@ class _CreateNewList extends State<CreateNewList>
               toggleDelete: false,
               items: {'incomplete': [], 'complete': []},
             );
-            widget._listModel.addToUserLists(newestAddition);
-            widget._listModel.updateListInDB().then((onValue) {
-              Navigator.of(context).pop();
-              Navigator.of(context).pushReplacementNamed('/home');
+            widget._listModel.addToUserLists(newestAddition).then((_) {
+              widget._listModel.updateListInDB().then((onValue) {
+                Navigator.of(context).pop();
+                Navigator.of(context).pushReplacementNamed('/home');
+              });
             });
           },
         )

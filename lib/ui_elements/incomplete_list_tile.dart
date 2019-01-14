@@ -56,6 +56,9 @@ class _IncompleteListTile extends State<IncompleteListTile> {
                             final DateTime date = new DateTime.now().toLocal();
                             final String dateCompleted =
                                 '${date.month}/${date.day}/${date.year} ${date.hour > 12 ? date.hour - 12 : date.hour}:${date.minute} ${date.hour > 12 ? 'pm' : 'am'}';
+                            if (widget.ourList['complete'] == null) {
+                              widget.ourList['complete'] = [];
+                            }
                             widget.ourList['complete'].add({
                               'item': items[int].toString(),
                               'date': dateCompleted,

@@ -25,7 +25,7 @@ class _MainListCard extends State<MainListCard> {
         ListTile(
             leading: Icon(
               IconData(ourList[int].icon, fontFamily: 'MaterialIcons'),
-              color: Theme.of(context).primaryColor,
+              color: Theme.of(context).accentColor,
             ),
             title: Text(ourList[int].title),
             subtitle: Text('Creator: ${ourList[int].creator}'),
