@@ -7,6 +7,7 @@ import './pages/list_one_list.dart';
 import './pages/create_new_list.dart';
 import './pages/auth.dart';
 import './pages/sign_up.dart';
+import './pages/loading_page.dart';
 
 void main() => runApp(MyApp());
 
@@ -19,59 +20,71 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   final MainModel _listModel = MainModel();
+  bool isAuth = false;
 
   @override
   void initState() {
     _listModel.autoAuthenticate().then((response) {
+      print(_listModel.authUser.username);
       if (response == null) {
         return;
       }
       if (_listModel.authUser != null) {
-        _listModel.setUserLists();
+        _listModel.setUserLists().then((_) {
+          setState(() {
+            isAuth = true;
+          });
+        });
       }
     });
-
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return ScopedModel<MainModel>(
-      model: _listModel,
-      child: MaterialApp(
-        title: 'Lean List',
-        theme: ThemeData(
-            primarySwatch: Colors.brown,
-            brightness: Brightness.light,
-            accentColor: Colors.green),
-        home: _listModel.authUser == null
-            ? AuthPage(_listModel)
-            : MyHomePage(_listModel),
-        routes: {
-          '/auth': (BuildContext context) => AuthPage(_listModel),
-          '/sign_up': (BuildContext context) => SignUp(_listModel),
-          '/lists': (BuildContext context) => MyHomePage(_listModel),
-          '/create': (BuildContext context) => CreateNewList(_listModel)
-        },
-        onGenerateRoute: (RouteSettings settings) {
-          final List<String> pathElements = settings.name.split('/');
-          if (pathElements[0] != '') {
+    if (isAuth) {
+      return ScopedModel<MainModel>(
+        model: _listModel,
+        child: MaterialApp(
+          title: 'Lean List',
+          theme: ThemeData(
+              primarySwatch: Colors.brown,
+              brightness: Brightness.light,
+              accentColor: Colors.green),
+          home: _listModel.authUser == null
+              ? AuthPage(_listModel)
+              : MyHomePage(_listModel),
+          routes: {
+            '/auth': (BuildContext context) => AuthPage(_listModel),
+            '/sign_up': (BuildContext context) => SignUp(_listModel),
+            '/lists': (BuildContext context) => MyHomePage(_listModel),
+            '/create': (BuildContext context) => CreateNewList(_listModel)
+          },
+          onGenerateRoute: (RouteSettings settings) {
+            final List<String> pathElements = settings.name.split('/');
+            if (pathElements[0] != '') {
+              return null;
+            }
+            if (pathElements[1] == 'list') {
+              final String listId = pathElements[2];
+              _listModel.selectAListCode(listId);
+              return MaterialPageRoute<bool>(
+                builder: (BuildContext context) => ListOneList(_listModel),
+              );
+            }
             return null;
-          }
-          if (pathElements[1] == 'list') {
-            final String listId = pathElements[2];
-            _listModel.selectAListCode(listId);
-            return MaterialPageRoute<bool>(
-              builder: (BuildContext context) => ListOneList(_listModel),
-            );
-          }
-          return null;
-        },
-        onUnknownRoute: (RouteSettings settings) {
-          return MaterialPageRoute(
-              builder: (BuildContext context) => MyHomePage(_listModel));
-        },
-      ),
-    );
+          },
+          onUnknownRoute: (RouteSettings settings) {
+            return MaterialPageRoute(
+                builder: (BuildContext context) => MyHomePage(_listModel));
+          },
+        ),
+      );
+    } else {
+      return MaterialApp(
+        title: 'Test',
+        home: LoadingPage(),
+      );
+    }
   }
 }
