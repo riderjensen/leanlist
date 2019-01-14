@@ -20,29 +20,34 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   final MainModel _listModel = MainModel();
-  bool isAuth = false;
+  bool checkAuth = false;
 
   @override
   void initState() {
     _listModel.autoAuthenticate().then((response) {
-      print(_listModel.authUser.username);
-      if (response == null) {
+      if (response == null ||
+          _listModel.authUser == null ||
+          response['success'] == false) {
+        setState(() {
+          checkAuth = true;
+        });
         return;
       }
       if (_listModel.authUser != null) {
         _listModel.setUserLists().then((_) {
           setState(() {
-            isAuth = true;
+            checkAuth = true;
           });
         });
       }
     });
+
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    if (isAuth) {
+    if (checkAuth) {
       return ScopedModel<MainModel>(
         model: _listModel,
         child: MaterialApp(

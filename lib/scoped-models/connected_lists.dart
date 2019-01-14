@@ -217,7 +217,8 @@ mixin GetListInformation on ConnectedLists {
         });
       });
     } else {
-      return _authenticatedUser = null;
+      _authenticatedUser = null;
+      return {'success': false};
     }
   }
 

@@ -51,6 +51,7 @@ class _SignUp extends State<SignUp> {
 
   @override
   Widget build(BuildContext context) {
+    bool buttonClicked = false;
     return Scaffold(
       body: Container(
         decoration: BoxDecoration(
@@ -155,28 +156,38 @@ class _SignUp extends State<SignUp> {
                     SizedBox(
                       height: 10.0,
                     ),
-                    RaisedButton(
-                      child: Text('Sign Up'),
-                      color: Theme.of(context).primaryColor,
-                      textColor: Colors.white,
-                      onPressed: () async {
-                        _formKey.currentState.save();
-                        if (!_formKey.currentState.validate()) {
-                          return;
-                        }
-                        final Map<String, dynamic> information =
-                            await widget.listModel.signUp(
-                          _formData['username'],
-                          _formData['email'],
-                          _formData['password'],
-                        );
-                        if (information['success'] == true) {
-                          Navigator.of(context).pushReplacementNamed('/lists');
-                        } else {
-                          _alertSignUpIssue(context, information['message']);
-                        }
-                      },
-                    )
+                    buttonClicked
+                        ? CircularProgressIndicator()
+                        : RaisedButton(
+                            child: Text('Sign Up'),
+                            color: Theme.of(context).primaryColor,
+                            textColor: Colors.white,
+                            onPressed: () async {
+                              _formKey.currentState.save();
+                              if (!_formKey.currentState.validate()) {
+                                return;
+                              }
+                              final Map<String, dynamic> information =
+                                  await widget.listModel.signUp(
+                                _formData['username'],
+                                _formData['email'],
+                                _formData['password'],
+                              );
+                              if (information['success'] == true) {
+                                setState(() {
+                                  buttonClicked = false;
+                                });
+                                Navigator.of(context)
+                                    .pushReplacementNamed('/lists');
+                              } else {
+                                setState(() {
+                                  buttonClicked = false;
+                                });
+                                _alertSignUpIssue(
+                                    context, information['message']);
+                              }
+                            },
+                          )
                   ],
                 ),
               ),

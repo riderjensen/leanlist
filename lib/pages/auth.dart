@@ -47,6 +47,7 @@ class _AuthPage extends State<AuthPage> {
 
   @override
   Widget build(BuildContext context) {
+    bool buttonClicked = false;
     return Scaffold(
       body: Container(
         decoration: BoxDecoration(
@@ -130,30 +131,42 @@ class _AuthPage extends State<AuthPage> {
                     SizedBox(
                       height: 10.0,
                     ),
-                    RaisedButton(
-                      child: Text('Log In'),
-                      color: Theme.of(context).primaryColor,
-                      textColor: Colors.white,
-                      onPressed: () async {
-                        _formKey.currentState.save();
-                        if (!_formKey.currentState.validate()) {
-                          return;
-                        }
-                        return await widget.listModel
-                            .signIn(
-                          _formData['email'],
-                          _formData['password'],
-                        )
-                            .then((information) {
-                          if (information['success'] == true) {
-                            Navigator.of(context)
-                                .pushReplacementNamed('/lists');
-                          } else {
-                            _alertSignInIssue(context, information['message']);
-                          }
-                        });
-                      },
-                    )
+                    buttonClicked
+                        ? CircularProgressIndicator()
+                        : RaisedButton(
+                            child: Text('Log In'),
+                            color: Theme.of(context).primaryColor,
+                            textColor: Colors.white,
+                            onPressed: () async {
+                              setState(() {
+                                buttonClicked = true;
+                              });
+                              _formKey.currentState.save();
+                              if (!_formKey.currentState.validate()) {
+                                return;
+                              }
+                              return await widget.listModel
+                                  .signIn(
+                                _formData['email'],
+                                _formData['password'],
+                              )
+                                  .then((information) {
+                                if (information['success'] == true) {
+                                  setState(() {
+                                    buttonClicked = false;
+                                  });
+                                  Navigator.of(context)
+                                      .pushReplacementNamed('/lists');
+                                } else {
+                                  setState(() {
+                                    buttonClicked = false;
+                                  });
+                                  _alertSignInIssue(
+                                      context, information['message']);
+                                }
+                              });
+                            },
+                          )
                   ],
                 ),
               ),
