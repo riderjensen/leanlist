@@ -122,6 +122,7 @@ mixin GetListInformation on ConnectedLists {
     returnedList.forEach((item) {
       final Map<String, dynamic> returnedData = jsonDecode(item.body);
       if (returnedData != null) {
+        _userLists = [];
         final ListModel myAddition = new ListModel(
             title: returnedData['title'],
             toggleDelete: returnedData['toggleDelete'],
